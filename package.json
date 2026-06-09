@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "watch:css": "vite build --watch",
+    "dev:auto": "concurrently \"npm run dev\" \"npm run watch:css\""
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.1",
+    "axios": "^1.6.4",
+    "laravel-vite-plugin": "^1.0.0",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.31",
+    "sass-embedded": "^1.93.2",
+    "tailwindcss": "^3.3.6",
+    "vite": "^7.1.9",
+    "vue": "^3.4.0"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.8",
+    "bootstrap": "^5.3.8",
+    "flatpickr": "^4.6.13"
+  }
+}
