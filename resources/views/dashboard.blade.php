@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" data-theme="{{ Cookie::get('theme', 'light') }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,23 +7,27 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     @stack('styles')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 <body class="dashboard-body">
 
-    {{-- Overlay --}}
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    {{-- Sidebar --}}
     <aside class="barra-lateral" id="sidebar">
 
         <div class="sidebar-header">
             <div class="sidebar-brand">
                 <div class="sidebar-brand-icon">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="12" y1="22" x2="12" y2="10"/>
-                        <path d="M12 10 C12 10 8 7 8 4a4 4 0 0 1 8 0c0 3-4 6-4 6z"/>
-                        <path d="M12 14 C14 12 17 13 18 11"/>
-                        <path d="M12 14 C10 12 7 13 6 11"/>
+                        <path d="M12 10C12 10 8 7 8 4a4 4 0 0 1 8 0c0 3-4 6-4 6z"/>
+                        <path d="M12 14C14 12 17 13 18 11"/>
+                        <path d="M12 14C10 12 7 13 6 11"/>
                     </svg>
                 </div>
                 <div>
@@ -32,7 +36,7 @@
                 </div>
             </div>
             <button class="sidebar-close" id="sidebarClose" aria-label="Fechar menu">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
                     <line x1="18" y1="6" x2="6" y2="18"/>
                     <line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
@@ -70,7 +74,7 @@
                 <ul class="submenu">
                     <li><a href="{{ route('visitas.agendar') }}" class="{{ Request::routeIs('visitas.agendar') ? 'active' : '' }}">Agendar Visita</a></li>
                     <li><a href="{{ route('visitas.minhas') }}" class="{{ Request::routeIs('visitas.minhas') ? 'active' : '' }}">Minhas Visitas</a></li>
-                    <li><a href="#" class="{{ Request::routeIs('visitas.relatorios') ? 'active' : '' }}">Relatórios</a></li>
+                    <li><a href="#">Relatórios</a></li>
                 </ul>
             </div>
 
@@ -101,11 +105,7 @@
             <a href="{{ route('logout') }}"
                onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                class="sidebar-logout">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                    <polyline points="16 17 21 12 16 7"/>
-                    <line x1="21" y1="12" x2="9" y2="12"/>
-                </svg>
+                <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 Sair
             </a>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">@csrf</form>
@@ -113,29 +113,30 @@
 
     </aside>
 
-    {{-- Conteúdo principal --}}
     <main class="conteudo-principal">
 
         <header class="topo">
             <div class="topo-left">
                 <button class="sidebar-toggle" id="sidebarToggle" aria-label="Abrir menu">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
                         <line x1="3" y1="6" x2="21" y2="6"/>
                         <line x1="3" y1="12" x2="21" y2="12"/>
                         <line x1="3" y1="18" x2="21" y2="18"/>
                     </svg>
                 </button>
                 <div class="topo-brand">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: var(--green-800)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: var(--g-600)">
                         <line x1="12" y1="22" x2="12" y2="10"/>
-                        <path d="M12 10 C12 10 8 7 8 4a4 4 0 0 1 8 0c0 3-4 6-4 6z"/>
-                        <path d="M12 14 C14 12 17 13 18 11"/>
-                        <path d="M12 14 C10 12 7 13 6 11"/>
+                        <path d="M12 10C12 10 8 7 8 4a4 4 0 0 1 8 0c0 3-4 6-4 6z"/>
                     </svg>
-                    <span>Meu Agrônomo</span>
+                    Meu Agrônomo
                 </div>
             </div>
             <div class="topo-right">
+                <button class="dark-toggle" id="darkToggle" aria-label="Alternar tema">
+                    <svg id="iconSun" viewBox="0 0 24 24" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    <svg id="iconMoon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
                 <div class="user-avatar" title="{{ Auth::user()->name }}">
                     {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
                 </div>
@@ -152,29 +153,40 @@
         const toggleBtn = document.getElementById('sidebarToggle');
         const closeBtn = document.getElementById('sidebarClose');
 
-        function openSidebar() {
-            sidebar.classList.add('open');
-            overlay.classList.add('visible');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeSidebar() {
-            sidebar.classList.remove('open');
-            overlay.classList.remove('visible');
-            document.body.style.overflow = '';
-        }
+        function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('visible'); document.body.style.overflow = 'hidden'; }
+        function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('visible'); document.body.style.overflow = ''; }
 
         toggleBtn.addEventListener('click', openSidebar);
         closeBtn.addEventListener('click', closeSidebar);
         overlay.addEventListener('click', closeSidebar);
 
-        document.querySelectorAll('.toggle').forEach(toggle => {
-            toggle.addEventListener('click', function () {
-                const item = toggle.closest('.menu-drop');
+        document.querySelectorAll('.toggle').forEach(t => {
+            t.addEventListener('click', function() {
+                const item = t.closest('.menu-drop');
                 const isOpen = item.classList.contains('open');
                 document.querySelectorAll('.menu-drop.open').forEach(m => m.classList.remove('open'));
                 if (!isOpen) item.classList.add('open');
             });
+        });
+
+        const darkToggle = document.getElementById('darkToggle');
+        const iconSun = document.getElementById('iconSun');
+        const iconMoon = document.getElementById('iconMoon');
+        const html = document.documentElement;
+
+        function applyTheme(theme) {
+            html.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            if (theme === 'dark') { iconSun.style.display = 'block'; iconMoon.style.display = 'none'; }
+            else { iconSun.style.display = 'none'; iconMoon.style.display = 'block'; }
+        }
+
+        const saved = localStorage.getItem('theme') || 'light';
+        applyTheme(saved);
+
+        darkToggle.addEventListener('click', function() {
+            const current = html.getAttribute('data-theme');
+            applyTheme(current === 'dark' ? 'light' : 'dark');
         });
     </script>
     @stack('scripts')
