@@ -12,13 +12,13 @@
     <div class="auth-panel-left">
         <div class="auth-brand">
             <div class="auth-brand-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 22V12"/>
-                    <path d="M12 12C12 12 7 9 7 5a5 5 0 0 1 10 0c0 4-5 7-5 7z"/>
-                    <path d="M12 12c0 0 4-2 6 1"/>
-                    <path d="M12 12c0 0-4-2-6 1"/>
-                </svg>
-            </div>
+    <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22V12"/>
+        <path d="M12 12C12 12 7 9 7 5a5 5 0 0 1 10 0c0 4-5 7-5 7z"/>
+        <path d="M12 12c0 0 4-2 6 1"/>
+        <path d="M12 12c0 0-4-2-6 1"/>
+    </svg>
+</div>
             <span class="auth-brand-name">Meu Agrônomo</span>
         </div>
 
