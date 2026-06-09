@@ -68,6 +68,10 @@
   --danger-bg: #fff4f4;
   --danger-brd: rgba(192,57,43,0.2);
 
+  --mc-bg-1: #f5fbf7;
+  --mc-bg-2: #f2f9f5;
+  --mc-bg-3: #eff8f3;
+
   --r-sm:   6px;
   --r-md:   10px;
   --r-lg:   14px;
@@ -123,6 +127,10 @@
   --metric-label-1:  #4d9e6a;
   --metric-label-2:  #5aaa7a;
   --metric-label-3:  #6ab585;
+
+  --mc-bg-1: #1e2e23;
+  --mc-bg-2: #1c2b21;
+  --mc-bg-3: #1a2920;
 
   --danger:    #f87171;
   --danger-bg: #2c1c1c;
@@ -379,25 +387,25 @@ body.dashboard-body { display: block; min-height: 100vh; background: var(--bg-pa
 
 .metric-card {
   background: var(--bg-card); border: 1.5px solid var(--border-strong);
-  border-radius: var(--r-lg); padding: 16px 18px;
+  border-radius: var(--r-lg); padding: 20px 22px;
   transition: transform var(--t), box-shadow var(--t), background var(--t);
 }
-.metric-card:nth-child(1) { border-left: 4px solid var(--metric-border-1); }
-.metric-card:nth-child(2) { border-left: 4px solid var(--metric-border-2); }
-.metric-card:nth-child(3) { border-left: 4px solid var(--metric-border-3); }
+.metric-card:nth-child(1) { border-left: 4px solid var(--metric-border-1); background: var(--mc-bg-1); }
+.metric-card:nth-child(2) { border-left: 4px solid var(--metric-border-2); background: var(--mc-bg-2); }
+.metric-card:nth-child(3) { border-left: 4px solid var(--metric-border-3); background: var(--mc-bg-3); }
 .metric-card:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.08); }
 [data-theme="dark"] .metric-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.3); }
 
 .metric-label {
-  font-size: 9px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.08em; margin-bottom: 7px;
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.07em; margin-bottom: 8px;
 }
 .metric-card:nth-child(1) .metric-label { color: var(--metric-label-1); }
 .metric-card:nth-child(2) .metric-label { color: var(--metric-label-2); }
 .metric-card:nth-child(3) .metric-label { color: var(--metric-label-3); }
 
-.metric-value { font-size: 30px; font-weight: 300; color: var(--text-high); letter-spacing: -0.05em; line-height: 1; margin-bottom: 4px; }
-.metric-sub { font-size: 10px; color: var(--text-low); font-weight: 500; }
+.metric-value { font-size: 44px; font-weight: 300; color: var(--text-high); letter-spacing: -0.05em; line-height: 1; margin-bottom: 4px; }
+.metric-sub { font-size: 11px; color: var(--text-low); font-weight: 500; margin-top: 2px; }
 
 .atalhos { margin-bottom: 26px; }
 .section-title { font-size: 9px; font-weight: 700; color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 10px; }
