@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Agrônomo — Entrar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="auth-body">
@@ -12,13 +15,13 @@
     <div class="auth-panel-left">
         <div class="auth-brand">
             <div class="auth-brand-icon">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="12" y1="22" x2="12" y2="10"/>
-        <path d="M12 10 C12 10 8 7 8 4a4 4 0 0 1 8 0c0 3-4 6-4 6z"/>
-        <path d="M12 14 C14 12 17 13 18 11"/>
-        <path d="M12 14 C10 12 7 13 6 11"/>
-    </svg>
-</div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 22V12"/>
+                    <path d="M12 12C12 12 7 9 7 5a5 5 0 0 1 10 0c0 4-5 7-5 7z"/>
+                    <path d="M12 12c0 0 4-2 6 1"/>
+                    <path d="M12 12c0 0-4-2-6 1"/>
+                </svg>
+            </div>
             <span class="auth-brand-name">Meu Agrônomo</span>
         </div>
 
