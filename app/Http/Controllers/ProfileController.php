@@ -22,7 +22,7 @@ class ProfileController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user(); // <-- Alterado aqui
 
-        return view('profile.edit-info', [
+        return view('perfil.info', [
             'user' => $user,
         ]);
     }
@@ -53,7 +53,7 @@ class ProfileController extends Controller
 
     public function editPassword()
     {
-        return view('profile.edit-password');
+        return view('perfil.senha');
     }
 
     public function updatePassword(Request $request)

@@ -1,131 +1,90 @@
-@extends('dashboard') {{-- Estende o layout principal --}}
-
-@section('page-title', 'Editar Cliente') {{-- Define o título da aba --}}
+{{--
+    CLIENTES — EDITAR
+    Rota: clientes.edit (GET, {cliente})  ·  Envia para: clientes.update (PUT, {cliente})
+    Variável esperada: $cliente
+--}}
+@extends('dashboard')
+@section('page-title', 'Editar cliente — Meu Agrônomo')
+@section('topbar-title', 'Editar cliente')
 
 @section('main-content')
-<main class="conteudo-principal">
-    <header class="topo">
-        <h2>Editar Cliente</h2>
-    </header>
+<div class="ma-page">
 
-    <section class="form-cliente">
-        <h3>Editar Cliente: {{ $cliente->nome }}</h3>
+    <a href="{{ route('clientes.index') }}" class="btn-back" style="margin-bottom:14px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Clientes
+    </a>
 
-        {{-- Mensagens de erro --}}
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+    <div class="page-header">
+        <div>
+            <div class="page-eyebrow">Gestão · Editar</div>
+            <h2>{{ $cliente->nome ?? 'Editar cliente' }}</h2>
+        </div>
+    </div>
 
-        <form action="{{ route('clientes.update', $cliente->id) }}" method="POST">
-            @csrf
-            @method('PUT')
+    <div class="form-page">
+        <div class="form-card">
+            <form action="{{ route('clientes.update', $cliente->id ?? 0) }}" method="POST">
+                @csrf
+                @method('PUT')
 
-            <h3>Dados Pessoais</h3>
-            <div class="form-group">
-                <label for="nome">Nome Completo</label>
-                <input type="text" name="nome" id="nome" value="{{ old('nome', $cliente->nome) }}" required>
-            </div>
+                <div class="form-group">
+                    <label>Nome completo</label>
+                    <input type="text" name="nome" value="{{ old('nome', $cliente->nome ?? '') }}" required>
+                    @error('nome')<span class="text-danger">{{ $message }}</span>@enderror
+                </div>
 
-            <div class="form-group">
-                <label for="cpf">CPF</label>
-                <input type="text" name="cpf" id="cpf" value="{{ old('cpf', $cliente->cpf) }}" placeholder="000.000.000-00" maxlength="14" required>
-            </div>
+                <div class="form-group">
+                    <label>CPF / Documento</label>
+                    <input type="text" name="cpf" value="{{ old('cpf', $cliente->cpf ?? '') }}">
+                </div>
 
-            <div class="form-group">
-                <label for="rg">RG (Opcional)</label>
-                <input type="text" name="rg" id="rg" value="{{ old('rg', $cliente->rg) }}" maxlength="20">
-            </div>
+                <div class="form-group">
+                    <label>Cultura principal</label>
+                    <select name="cultura">
+                        <option value="">Selecione…</option>
+                        @foreach(['Soja','Milho','Café','Cana','Algodão','Hortaliças','Citros','Trigo','Feijão','Pastagem'] as $c)
+                            <option value="{{ $c }}" {{ old('cultura', $cliente->cultura ?? '') == $c ? 'selected' : '' }}>{{ $c }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <div class="form-group">
-                <label for="contato">Contato Principal (Celular/WhatsApp)</label>
-                <input type="text" name="contato" id="contato" value="{{ old('contato', $cliente->contato) }}" placeholder="(00) 00000-0000" maxlength="15" required>
-            </div>
+                <div class="form-group">
+                    <label>Cidade / UF</label>
+                    <input type="text" name="cidade" value="{{ old('cidade', $cliente->cidade ?? '') }}">
+                </div>
 
-            <div class="form-group">
-                <label for="telefone">Telefone Fixo (Opcional)</label>
-                <input type="text" name="telefone" id="telefone" value="{{ old('telefone', $cliente->telefone) }}" placeholder="(00) 0000-0000" maxlength="14">
-            </div>
+                <div class="form-group">
+                    <label>Telefone / WhatsApp</label>
+                    <input type="text" name="telefone" value="{{ old('telefone', $cliente->telefone ?? '') }}">
+                </div>
 
-            <h3>Informações da Propriedade</h3>
-            <div class="form-group">
-                <label for="nome_propriedade">Nome da Propriedade Rural</label>
-                <input type="text" name="nome_propriedade" id="nome_propriedade" value="{{ old('nome_propriedade', $cliente->nome_propriedade) }}" required>
-            </div>
+                <div class="form-group">
+                    <label>E-mail</label>
+                    <input type="email" name="email" value="{{ old('email', $cliente->email ?? '') }}">
+                </div>
 
-            <div class="form-group">
-                <label for="area_total_ha">Área Total (Hectares)</label>
-                <input type="number" step="0.01" name="area_total_ha" id="area_total_ha" value="{{ old('area_total_ha', $cliente->area_total_ha) }}" required>
-            </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select name="status">
+                        @foreach(['ativo' => 'Ativo', 'inativo' => 'Inativo', 'pendente' => 'Pendente'] as $val => $lbl)
+                            <option value="{{ $val }}" {{ old('status', $cliente->status ?? 'ativo') == $val ? 'selected' : '' }}>{{ $lbl }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <div class="form-group">
-                <label for="cultura_principal">Cultura Principal (Opcional)</label>
-                <input type="text" name="cultura_principal" id="cultura_principal" value="{{ old('cultura_principal', $cliente->cultura_principal) }}">
-            </div>
+                <div class="form-group">
+                    <label>Observações</label>
+                    <textarea name="observacoes">{{ old('observacoes', $cliente->observacoes ?? '') }}</textarea>
+                </div>
 
-            <h3>Endereço da Propriedade</h3>
-            <div class="form-group">
-                <label for="cep">CEP</label>
-                <input type="text" name="cep" id="cep" value="{{ old('cep', $cliente->cep) }}" placeholder="00000-000" maxlength="9" required>
-            </div>
+                <div class="form-actions">
+                    <a href="{{ route('clientes.index') }}" class="btn-cancelar">Cancelar</a>
+                    <button type="submit" class="btn-salvar">Salvar alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
-            <div class="form-group">
-                <label for="endereco">Endereço</label>
-                <input type="text" name="endereco" id="endereco" value="{{ old('endereco', $cliente->endereco) }}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="cidade">Cidade</label>
-                <input type="text" name="cidade" id="cidade" value="{{ old('cidade', $cliente->cidade) }}" required>
-            </div>
-
-            <div class="form-group">
-                <label for="estado">Estado (UF)</label>
-                <input type="text" name="estado" id="estado" value="{{ old('estado', $cliente->estado) }}" maxlength="50" required>
-            </div>
-
-            <div class="form-actions">
-                <button type="submit" class="btn-salvar">Atualizar Cliente</button>
-                <a href="{{ route('clientes.index') }}" class="btn-cancelar">Cancelar</a>
-            </div>
-        </form>
-    </section>
-
-    {{-- Script para máscaras --}}
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const mask = (input, func) => {
-            if (!input) return;
-            input.addEventListener('input', e => e.target.value = func(e.target.value));
-        };
-
-        const maskCPF = v => v.replace(/\D/g,'')
-            .replace(/(\d{3})(\d)/,'$1.$2')
-            .replace(/(\d{3})(\d)/,'$1.$2')
-            .replace(/(\d{3})(\d{1,2})$/,'$1-$2');
-
-        const maskCelular = v => v.replace(/\D/g,'')
-            .replace(/(\d{2})(\d{5})(\d{0,4})/,'($1) $2-$3')
-            .slice(0,15);
-
-        const maskTelefone = v => v.replace(/\D/g,'')
-            .replace(/(\d{2})(\d{4})(\d{0,4})/,'($1) $2-$3')
-            .slice(0,14);
-
-        const maskCEP = v => v.replace(/\D/g,'')
-            .replace(/(\d{5})(\d)/,'$1-$2')
-            .slice(0,9);
-
-        mask(document.getElementById('cpf'), maskCPF);
-        mask(document.getElementById('contato'), maskCelular);
-        mask(document.getElementById('telefone'), maskTelefone);
-        mask(document.getElementById('cep'), maskCEP);
-    });
-    </script>
-</main>
+</div>
 @endsection
