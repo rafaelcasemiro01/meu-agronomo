@@ -367,9 +367,25 @@ body.dashboard-body {
 }
 [data-theme="dark"] .ma-user-avatar { color: var(--sage-bright); }
 
-/* Brand no topo (mobile) */
+/* Título da página na topbar (desktop) */
+.ma-topbar__title { font-size: 17px; font-weight: 700; letter-spacing: -.02em; color: var(--text); }
+
+/* Busca central */
+.ma-topbar__search {
+  display: flex; align-items: center; gap: 9px;
+  flex: 1; max-width: 420px; margin: 0 22px;
+  background: var(--surface-2); border: 1px solid var(--border-soft);
+  border-radius: var(--radius-pill); padding: 9px 16px;
+  transition: border-color .15s, box-shadow .15s;
+}
+.ma-topbar__search:focus-within { border-color: var(--focus); box-shadow: 0 0 0 4px color-mix(in srgb, var(--focus) 14%, transparent); }
+.ma-topbar__search svg { width: 16px; height: 16px; stroke: var(--text-mute); fill: none; stroke-width: 2; flex-shrink: 0; }
+.ma-topbar__search input { border: none; background: none; outline: none; width: 100%; font-size: 14px; color: var(--text); }
+.ma-topbar__search input::placeholder { color: var(--text-mute); }
+
+/* Brand no topo: só aparece no mobile (no desktop a logo já está na sidebar) */
 .ma-topbar__brand {
-  display: flex; align-items: center; gap: 8px;
+  display: none; align-items: center; gap: 8px;
   font-size: 14px; font-weight: 700; letter-spacing: -.02em;
   color: var(--text);
 }
@@ -454,6 +470,22 @@ body.auth-body {
   .auth-formside  { padding: 32px 24px; }
   .auth-mobile-mark { display: block; }
 }
+
+/* ============================================================
+   DASHBOARD — SAUDAÇÃO
+   ============================================================ */
+.ma-greet {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 20px; margin-bottom: 26px; flex-wrap: wrap;
+}
+.ma-greet__eyebrow {
+  font-size: 11.5px; font-weight: 600; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--text-mute); margin-bottom: 9px;
+}
+.ma-greet h1 { font-size: 30px; font-weight: 700; letter-spacing: -.03em; margin: 0; line-height: 1.06; }
+.ma-greet p { font-size: 15px; color: var(--text-mute); margin: 9px 0 0; }
+.ma-greet p b { color: var(--text-dim); font-weight: 700; }
+.ma-greet__actions { display: flex; gap: 10px; flex-shrink: 0; flex-wrap: wrap; }
 
 /* ============================================================
    DASHBOARD — CARDS DE MÉTRICAS
@@ -656,6 +688,65 @@ body.auth-body {
 /* ============================================================
    RESPONSIVO
    ============================================================ */
+/* ============================================================
+   DASHBOARD — DUAS COLUNAS (próximas visitas + atividade)
+   ============================================================ */
+.ma-cols { display: grid; grid-template-columns: 1.55fr 1fr; gap: 18px; }
+.ma-block { padding: 22px 24px 24px; }
+.ma-block__head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 4px; padding-bottom: 14px;
+}
+.ma-block__head h3 { font-size: 16px; font-weight: 700; letter-spacing: -.02em; margin: 0; }
+.ma-block__link {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 13px; font-weight: 600; color: var(--primary); cursor: pointer;
+}
+[data-theme="dark"] .ma-block__link { color: var(--sage-bright); }
+.ma-block__link svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+/* Linha de visita */
+.ma-visitrow {
+  display: flex; align-items: center; gap: 15px; width: 100%;
+  text-align: left; cursor: pointer; background: none;
+  border: none; border-top: 1px solid var(--border-soft);
+  padding: 14px 4px; transition: background .14s; text-decoration: none; color: inherit;
+}
+.ma-visitrow:hover { background: var(--surface-2); border-radius: 10px; }
+.ma-visitrow__date { display: flex; flex-direction: column; width: 62px; flex-shrink: 0; }
+.ma-visitrow__day { font-size: 13.5px; font-weight: 700; color: var(--text); }
+.ma-visitrow__time { font-size: 12.5px; color: var(--text-mute); font-variant-numeric: tabular-nums; }
+.ma-visitrow__avatar {
+  width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
+  background: var(--accent-soft); border: 2px solid var(--accent-line);
+  display: grid; place-items: center; font-size: 12px; font-weight: 800; color: var(--primary);
+}
+[data-theme="dark"] .ma-visitrow__avatar { color: var(--sage-bright); }
+.ma-visitrow__main { flex: 1; min-width: 0; }
+.ma-visitrow__client { font-weight: 600; font-size: 14.5px; letter-spacing: -.01em; }
+.ma-visitrow__type { font-size: 12.5px; color: var(--text-mute); margin-top: 2px; }
+.ma-visitrow__chev { color: var(--text-mute); flex-shrink: 0; }
+.ma-visitrow__chev svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+/* Atividade recente */
+.ma-activity__row { display: flex; gap: 12px; padding: 12px 0; align-items: flex-start; }
+.ma-activity__row + .ma-activity__row { border-top: 1px solid var(--border-soft); }
+.ma-activity__ic {
+  display: grid; place-items: center; width: 30px; height: 30px;
+  border-radius: 9px; flex-shrink: 0; margin-top: 1px;
+  background: var(--accent-soft); color: var(--primary);
+}
+[data-theme="dark"] .ma-activity__ic { color: var(--sage-bright); }
+.ma-activity__ic svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.9; }
+.ma-activity__txt { font-size: 14px; line-height: 1.4; }
+.ma-activity__txt b { font-weight: 600; }
+.ma-activity__when { font-size: 12.5px; color: var(--text-mute); margin-top: 3px; }
+
+@media (max-width: 980px) { .ma-cols { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
 @media (max-width: 900px) {
   .ma-shell { grid-template-columns: 1fr; }
 
@@ -669,4 +760,7 @@ body.auth-body {
 
   .ma-menu-btn { display: flex; }
   .ma-page { padding: 24px 20px 60px; }
+  .ma-topbar { padding: 0 20px; }
+  .ma-topbar__title, .ma-topbar__search { display: none; }
+  .ma-topbar__brand { display: flex; }
 }

@@ -124,6 +124,7 @@
                             <line x1="3" y1="18" x2="21" y2="18"/>
                         </svg>
                     </button>
+                    <h1 class="ma-topbar__title">@yield('topbar-title', 'Início')</h1>
                     <div class="ma-topbar__brand">
                         <div class="brand-icon">
                             <svg width="14" height="14" viewBox="0 0 64 64" fill="none">
@@ -137,6 +138,12 @@
                         Meu Agrônomo
                     </div>
                 </div>
+
+                <form class="ma-topbar__search" action="{{ route('clientes.index') }}" method="GET" role="search">
+                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+                    <input type="search" name="q" value="{{ request('q') }}" placeholder="Buscar clientes, visitas…">
+                </form>
+
                 <div class="ma-topbar__right">
                     <button class="ma-theme-btn" id="maThemeBtn" aria-label="Alternar tema">
                         <svg id="iconSun" viewBox="0 0 24 24" style="display:none">
@@ -153,6 +160,9 @@
                         <svg id="iconMoon" viewBox="0 0 24 24">
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
                         </svg>
+                    </button>
+                    <button class="ma-theme-btn" type="button" aria-label="Notificações" style="position:relative;">
+                        <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                     </button>
                     <div class="ma-user-avatar" title="{{ Auth::user()->name }}">
                         {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
