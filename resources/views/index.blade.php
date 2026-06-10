@@ -22,9 +22,11 @@
         <div class="auth-brandtop">
             <div class="auth-brandtop__icon">
                 <svg width="26" height="26" viewBox="0 0 64 64" fill="none">
-                    <line x1="32" y1="48" x2="32" y2="34" stroke="white" stroke-width="5" stroke-linecap="round"/>
-                    <path d="M32 34 C26 25 15 22 15 12 C15 12 27 12 32 24" fill="white" opacity="0.96"/>
-                    <path d="M32 30 C37 22 47 20 49 12 C49 12 41 14 36 24" fill="white" opacity="0.68"/>
+                    <path d="M32 50V37" stroke="white" stroke-width="4.3" stroke-linecap="round"/>
+                    <g transform="translate(32,38)">
+                        <path transform="rotate(27)" d="M0 0C-8.5-11-7-26 0-35 7-26 8.5-11 0 0Z" fill="white"/>
+                        <path transform="rotate(-29) scale(0.9)" d="M0 0C-8.5-11-7-26 0-35 7-26 8.5-11 0 0Z" fill="white"/>
+                    </g>
                 </svg>
             </div>
             <span class="auth-brandtop__name">Meu Agrônomo</span>
@@ -62,6 +64,15 @@
     {{-- Lado direito: formulário --}}
     <div class="auth-formside">
         <div class="auth-form-wrap">
+            <div class="auth-mobile-mark">
+                <svg viewBox="0 0 64 64" fill="none">
+                    <path d="M32 50V37" stroke="currentColor" stroke-width="4.3" stroke-linecap="round"/>
+                    <g transform="translate(32,38)">
+                        <path transform="rotate(27)" d="M0 0C-8.5-11-7-26 0-35 7-26 8.5-11 0 0Z" fill="currentColor"/>
+                        <path transform="rotate(-29) scale(0.9)" d="M0 0C-8.5-11-7-26 0-35 7-26 8.5-11 0 0Z" fill="currentColor"/>
+                    </g>
+                </svg>
+            </div>
             <h2>Bem-vindo de volta</h2>
             <p>Entre com suas credenciais para continuar.</p>
 

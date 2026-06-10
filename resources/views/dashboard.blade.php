@@ -29,12 +29,12 @@
             <div class="ma-sidebar__brand">
                 <div class="sidebar-brand">
                     <div class="sidebar-brand-icon">
-                        <svg width="20" height="20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <line x1="50" y1="72" x2="50" y2="52" stroke="white" stroke-width="6" stroke-linecap="round"/>
-                            <path d="M50 52 C42 40 26 36 26 22 C26 22 42 22 50 38" fill="white" opacity="0.96"/>
-                            <path d="M50 46 C57 36 70 33 73 22 C73 22 62 24 55 36" fill="white" opacity="0.68"/>
-                            <path d="M50 72 C45 80 38 83 35 90" stroke="white" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.45"/>
-                            <path d="M50 72 C55 81 62 84 65 91" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.3"/>
+                        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M32 50V37" stroke="currentColor" stroke-width="4.3" stroke-linecap="round"/>
+                            <g transform="translate(32,38)">
+                                <path transform="rotate(27)" d="M0 0C-8.5-11-7-26 0-35 7-26 8.5-11 0 0Z" fill="currentColor"/>
+                                <path transform="rotate(-29) scale(0.9)" d="M0 0C-8.5-11-7-26 0-35 7-26 8.5-11 0 0Z" fill="currentColor"/>
+                            </g>
                         </svg>
                     </div>
                     <div>
@@ -126,10 +126,12 @@
                     </button>
                     <div class="ma-topbar__brand">
                         <div class="brand-icon">
-                            <svg width="14" height="14" viewBox="0 0 100 100" fill="none">
-                                <line x1="50" y1="72" x2="50" y2="52" stroke="white" stroke-width="8" stroke-linecap="round"/>
-                                <path d="M50 52 C42 40 26 36 26 22 C26 22 42 22 50 38" fill="white" opacity="0.96"/>
-                                <path d="M50 46 C57 36 70 33 73 22 C73 22 62 24 55 36" fill="white" opacity="0.68"/>
+                            <svg width="14" height="14" viewBox="0 0 64 64" fill="none">
+                                <path d="M32 50V37" stroke="white" stroke-width="5.5" stroke-linecap="round"/>
+                                <g transform="translate(32,38)">
+                                    <path transform="rotate(27)" d="M0 0C-8.5-11-7-26 0-35 7-26 8.5-11 0 0Z" fill="white"/>
+                                    <path transform="rotate(-29) scale(0.9)" d="M0 0C-8.5-11-7-26 0-35 7-26 8.5-11 0 0Z" fill="white"/>
+                                </g>
                             </svg>
                         </div>
                         Meu Agrônomo

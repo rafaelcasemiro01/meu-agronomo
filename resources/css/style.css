@@ -233,15 +233,13 @@ body.dashboard-body {
 }
 
 /* Brand lockup na sidebar */
-.sidebar-brand { display: flex; align-items: center; gap: 10px; }
+.sidebar-brand { display: flex; align-items: center; gap: 11px; }
 .sidebar-brand-icon {
-  width: 36px; height: 36px;
-  background: var(--primary);
-  border-radius: 10px;
+  width: 34px; height: 34px;
   display: grid; place-items: center;
-  flex-shrink: 0;
+  flex-shrink: 0; color: var(--primary);
 }
-.sidebar-brand-icon svg { width: 20px; height: 20px; }
+.sidebar-brand-icon svg { width: 32px; height: 32px; }
 .sidebar-brand-name { font-size: 15px; font-weight: 700; letter-spacing: -.02em; line-height: 1; }
 .sidebar-brand-sub  { font-size: 11px; font-weight: 500; letter-spacing: .02em; margin-top: 3px; opacity: .6; }
 
@@ -425,6 +423,10 @@ body.auth-body {
 .auth-form-wrap h2 { font-size: 30px; font-weight: 700; letter-spacing: -.03em; margin: 0 0 6px; }
 .auth-form-wrap > p { font-size: 15px; color: var(--text-mute); margin: 0 0 32px; }
 
+/* Marca exibida no formulário apenas no mobile (quando o brandside some) */
+.auth-mobile-mark { display: none; color: var(--primary); margin-bottom: 22px; }
+.auth-mobile-mark svg { width: 42px; height: 42px; }
+
 .auth-field { margin-bottom: 16px; }
 
 .auth-links { margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
@@ -450,6 +452,7 @@ body.auth-body {
   body.auth-body { grid-template-columns: 1fr; }
   .auth-brandside { display: none; }
   .auth-formside  { padding: 32px 24px; }
+  .auth-mobile-mark { display: block; }
 }
 
 /* ============================================================
