@@ -1,194 +1,203 @@
 <!DOCTYPE html>
-<html lang="pt-br" data-theme="{{ Cookie::get('theme', 'light') }}">
+<html lang="pt-br" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('page-title', 'Meu Agrônomo')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     @stack('styles')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
         (function() {
-            const theme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', theme);
+            const t = localStorage.getItem('ma_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', t);
         })();
     </script>
 </head>
 <body class="dashboard-body">
 
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    {{-- Scrim (overlay mobile) --}}
+    <div class="ma-scrim" id="maScrim"></div>
 
-    <aside class="barra-lateral" id="sidebar">
+    <div class="ma-shell">
 
-        <div class="sidebar-header">
-            <div class="sidebar-brand">
-                <div class="sidebar-brand-icon">
-                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="22" x2="12" y2="10"/>
-                        <path d="M12 10C12 10 8 7 8 4a4 4 0 0 1 8 0c0 3-4 6-4 6z"/>
-                        <path d="M12 14C14 12 17 13 18 11"/>
-                        <path d="M12 14C10 12 7 13 6 11"/>
+        {{-- SIDEBAR --}}
+        <aside class="ma-sidebar" id="maSidebar">
+
+            <div class="ma-sidebar__brand">
+                <div class="sidebar-brand">
+                    <div class="sidebar-brand-icon">
+                        <svg width="20" height="20" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <line x1="50" y1="72" x2="50" y2="52" stroke="white" stroke-width="6" stroke-linecap="round"/>
+                            <path d="M50 52 C42 40 26 36 26 22 C26 22 42 22 50 38" fill="white" opacity="0.96"/>
+                            <path d="M50 46 C57 36 70 33 73 22 C73 22 62 24 55 36" fill="white" opacity="0.68"/>
+                            <path d="M50 72 C45 80 38 83 35 90" stroke="white" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.45"/>
+                            <path d="M50 72 C55 81 62 84 65 91" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none" opacity="0.3"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="sidebar-brand-name">Meu Agrônomo</div>
+                        <div class="sidebar-brand-sub">Gestão agrícola</div>
+                    </div>
+                </div>
+                <button class="ma-iconbtn" id="maSidebarClose" aria-label="Fechar menu">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
                     </svg>
-                </div>
-                <div>
-                    <div class="sidebar-brand-name">Meu Agrônomo</div>
-                    <div class="sidebar-brand-sub">Gestão agrícola</div>
-                </div>
+                </button>
             </div>
-            <button class="sidebar-close" id="sidebarClose" aria-label="Fechar menu">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-                    <line x1="18" y1="6" x2="6" y2="18"/>
-                    <line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-            </button>
-        </div>
 
-        <nav class="sidebar-nav">
+            <nav class="ma-nav">
+                <a href="{{ route('dashboard') }}"
+                   class="ma-nav__link {{ Request::routeIs('dashboard') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Início
+                </a>
 
-            <a href="{{ route('dashboard') }}" class="sidebar-link {{ Request::routeIs('dashboard') ? 'active' : '' }}">
-                <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                Início
-            </a>
+                <div class="t-eyebrow" style="padding: 14px 8px 5px;">Gestão</div>
 
-            <div class="sidebar-section-label">Gestão</div>
-
-            <div class="menu-drop">
-                <a class="sidebar-link toggle">
+                <a href="{{ route('clientes.index') }}"
+                   class="ma-nav__link {{ Request::routeIs('clientes.index') || Request::routeIs('clientes.edit') ? 'active' : '' }}">
                     <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     Clientes
-                    <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </a>
-                <ul class="submenu">
-                    <li><a href="{{ route('clientes.create') }}" class="{{ Request::routeIs('clientes.create') ? 'active' : '' }}">Adicionar cliente</a></li>
-                    <li><a href="{{ route('clientes.index') }}" class="{{ Request::routeIs('clientes.index') || Request::routeIs('clientes.edit') ? 'active' : '' }}">Lista de clientes</a></li>
-                    <li><a href="#">Relatórios</a></li>
-                </ul>
-            </div>
+                <a href="{{ route('clientes.create') }}"
+                   class="ma-nav__link indent {{ Request::routeIs('clientes.create') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                    Adicionar cliente
+                </a>
 
-            <div class="menu-drop">
-                <a class="sidebar-link toggle">
+                <div class="t-eyebrow" style="padding: 14px 8px 5px;">Visita técnica</div>
+
+                <a href="{{ route('visitas.agendar') }}"
+                   class="ma-nav__link {{ Request::routeIs('visitas.agendar') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="14" x2="12" y2="14" stroke-width="3"/></svg>
+                    Agendar visita
+                </a>
+                <a href="{{ route('visitas.minhas') }}"
+                   class="ma-nav__link indent {{ Request::routeIs('visitas.minhas') ? 'active' : '' }}">
                     <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                    Visita Técnica
-                    <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    Minhas visitas
                 </a>
-                <ul class="submenu">
-                    <li><a href="{{ route('visitas.agendar') }}" class="{{ Request::routeIs('visitas.agendar') ? 'active' : '' }}">Agendar Visita</a></li>
-                    <li><a href="{{ route('visitas.minhas') }}" class="{{ Request::routeIs('visitas.minhas') ? 'active' : '' }}">Minhas Visitas</a></li>
-                    <li><a href="#">Relatórios</a></li>
-                </ul>
-            </div>
 
-            <div class="sidebar-section-label">Conta</div>
+                <div class="t-eyebrow" style="padding: 14px 8px 5px;">Conta</div>
 
-            <div class="menu-drop">
-                <a class="sidebar-link toggle">
+                <a href="{{ route('perfil.info') }}"
+                   class="ma-nav__link {{ Request::routeIs('perfil.info') || Request::routeIs('perfil.senha') ? 'active' : '' }}">
                     <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    Meu Perfil
-                    <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    Meu perfil
                 </a>
-                <ul class="submenu">
-                    <li><a href="{{ route('perfil.info') }}" class="{{ Request::routeIs('perfil.info') ? 'active' : '' }}">Informações Pessoais</a></li>
-                    <li><a href="{{ route('perfil.senha') }}" class="{{ Request::routeIs('perfil.senha') ? 'active' : '' }}">Alterar Senha</a></li>
-                </ul>
-            </div>
+            </nav>
 
-        </nav>
-
-        <div class="sidebar-footer">
-            <div class="sidebar-user">
-                <div class="sidebar-user-avatar">{{ strtoupper(substr(Auth::user()->name, 0, 2)) }}</div>
-                <div class="sidebar-user-info">
-                    <div class="sidebar-user-name">{{ Auth::user()->name }}</div>
-                    <div class="sidebar-user-email">{{ Auth::user()->email }}</div>
+            <div class="ma-sidebar__foot">
+                <div class="ma-sidebar__user">
+                    <div class="ma-sidebar__avatar">{{ strtoupper(substr(Auth::user()->name, 0, 2)) }}</div>
+                    <div style="overflow:hidden; flex:1;">
+                        <div class="ma-sidebar__uname">{{ Auth::user()->name }}</div>
+                        <div class="ma-sidebar__uemail">{{ Auth::user()->email }}</div>
+                    </div>
                 </div>
+                <a href="{{ route('logout') }}"
+                   onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                   class="ma-sidebar__logout">
+                    <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Sair da conta
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">@csrf</form>
             </div>
-            <a href="{{ route('logout') }}"
-               onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-               class="sidebar-logout">
-                <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                Sair
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">@csrf</form>
-        </div>
 
-    </aside>
+        </aside>
 
-    <main class="conteudo-principal">
+        {{-- CONTEÚDO PRINCIPAL --}}
+        <main class="ma-main">
 
-        <header class="topo">
-            <div class="topo-left">
-                <button class="sidebar-toggle" id="sidebarToggle" aria-label="Abrir menu">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-                        <line x1="3" y1="6" x2="21" y2="6"/>
-                        <line x1="3" y1="12" x2="21" y2="12"/>
-                        <line x1="3" y1="18" x2="21" y2="18"/>
-                    </svg>
-                </button>
-                <div class="topo-brand">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="color: var(--g-600)">
-                        <line x1="12" y1="22" x2="12" y2="10"/>
-                        <path d="M12 10C12 10 8 7 8 4a4 4 0 0 1 8 0c0 3-4 6-4 6z"/>
-                    </svg>
-                    Meu Agrônomo
+            {{-- TOPBAR --}}
+            <header class="ma-topbar">
+                <div class="ma-topbar__left">
+                    <button class="ma-menu-btn" id="maMenuBtn" aria-label="Abrir menu">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <line x1="3" y1="12" x2="21" y2="12"/>
+                            <line x1="3" y1="18" x2="21" y2="18"/>
+                        </svg>
+                    </button>
+                    <div class="ma-topbar__brand">
+                        <div class="brand-icon">
+                            <svg width="14" height="14" viewBox="0 0 100 100" fill="none">
+                                <line x1="50" y1="72" x2="50" y2="52" stroke="white" stroke-width="8" stroke-linecap="round"/>
+                                <path d="M50 52 C42 40 26 36 26 22 C26 22 42 22 50 38" fill="white" opacity="0.96"/>
+                                <path d="M50 46 C57 36 70 33 73 22 C73 22 62 24 55 36" fill="white" opacity="0.68"/>
+                            </svg>
+                        </div>
+                        Meu Agrônomo
+                    </div>
                 </div>
-            </div>
-            <div class="topo-right">
-                <button class="dark-toggle" id="darkToggle" aria-label="Alternar tema">
-                    <svg id="iconSun" viewBox="0 0 24 24" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-                    <svg id="iconMoon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                </button>
-                <div class="user-avatar" title="{{ Auth::user()->name }}">
-                    {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                <div class="ma-topbar__right">
+                    <button class="ma-theme-btn" id="maThemeBtn" aria-label="Alternar tema">
+                        <svg id="iconSun" viewBox="0 0 24 24" style="display:none">
+                            <circle cx="12" cy="12" r="5"/>
+                            <line x1="12" y1="1" x2="12" y2="3"/>
+                            <line x1="12" y1="21" x2="12" y2="23"/>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                            <line x1="1" y1="12" x2="3" y2="12"/>
+                            <line x1="21" y1="12" x2="23" y2="12"/>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                        </svg>
+                        <svg id="iconMoon" viewBox="0 0 24 24">
+                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                        </svg>
+                    </button>
+                    <div class="ma-user-avatar" title="{{ Auth::user()->name }}">
+                        {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
+                    </div>
                 </div>
+            </header>
+
+            {{-- CONTEÚDO DA PÁGINA --}}
+            <div class="ma-content">
+                @yield('main-content')
             </div>
-        </header>
 
-        @yield('main-content')
+        </main>
 
-    </main>
+    </div>{{-- /.ma-shell --}}
 
     <script defer>
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebarOverlay');
-        const toggleBtn = document.getElementById('sidebarToggle');
-        const closeBtn = document.getElementById('sidebarClose');
+        // --- Sidebar (mobile) ---
+        const sidebar  = document.getElementById('maSidebar');
+        const scrim    = document.getElementById('maScrim');
+        const menuBtn  = document.getElementById('maMenuBtn');
+        const closeBtn = document.getElementById('maSidebarClose');
 
-        function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('visible'); document.body.style.overflow = 'hidden'; }
-        function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('visible'); document.body.style.overflow = ''; }
+        function openSidebar()  { sidebar.classList.add('open'); scrim.classList.add('visible'); document.body.style.overflow = 'hidden'; }
+        function closeSidebar() { sidebar.classList.remove('open'); scrim.classList.remove('visible'); document.body.style.overflow = ''; }
 
-        toggleBtn.addEventListener('click', openSidebar);
+        menuBtn.addEventListener('click', openSidebar);
         closeBtn.addEventListener('click', closeSidebar);
-        overlay.addEventListener('click', closeSidebar);
+        scrim.addEventListener('click', closeSidebar);
 
-        document.querySelectorAll('.toggle').forEach(t => {
-            t.addEventListener('click', function() {
-                const item = t.closest('.menu-drop');
-                const isOpen = item.classList.contains('open');
-                document.querySelectorAll('.menu-drop.open').forEach(m => m.classList.remove('open'));
-                if (!isOpen) item.classList.add('open');
-            });
-        });
-
-        const darkToggle = document.getElementById('darkToggle');
-        const iconSun = document.getElementById('iconSun');
-        const iconMoon = document.getElementById('iconMoon');
-        const html = document.documentElement;
+        // --- Dark mode ---
+        const themeBtn  = document.getElementById('maThemeBtn');
+        const iconSun   = document.getElementById('iconSun');
+        const iconMoon  = document.getElementById('iconMoon');
+        const htmlEl    = document.documentElement;
 
         function applyTheme(theme) {
-            html.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-            if (theme === 'dark') { iconSun.style.display = 'block'; iconMoon.style.display = 'none'; }
-            else { iconSun.style.display = 'none'; iconMoon.style.display = 'block'; }
+            htmlEl.setAttribute('data-theme', theme);
+            localStorage.setItem('ma_theme', theme);
+            iconSun.style.display  = theme === 'dark' ? 'block' : 'none';
+            iconMoon.style.display = theme === 'dark' ? 'none'  : 'block';
         }
 
-        const saved = localStorage.getItem('theme') || 'light';
-        applyTheme(saved);
+        applyTheme(localStorage.getItem('ma_theme') || 'light');
 
-        darkToggle.addEventListener('click', function() {
-            const current = html.getAttribute('data-theme');
-            applyTheme(current === 'dark' ? 'light' : 'dark');
+        themeBtn.addEventListener('click', function() {
+            applyTheme(htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
         });
     </script>
     @stack('scripts')

@@ -1,93 +1,115 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meu Agrônomo — Entrar</title>
+    <title>Meu Agrônomo — Login</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <script>
+        (function() {
+            var t = localStorage.getItem('ma_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
 </head>
 <body class="auth-body">
 
-    {{-- Painel esquerdo —————————————————————————————— --}}
-    <div class="auth-panel-left">
-        <div class="auth-brand">
-            <div class="auth-brand-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.8)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 22V12"/>
-                    <path d="M12 12C12 12 7 9 7 5a5 5 0 0 1 10 0c0 4-5 7-5 7z"/>
-                    <path d="M12 12c0 0 4-2 6 1"/>
-                    <path d="M12 12c0 0-4-2-6 1"/>
+    {{-- Lado esquerdo: brand --}}
+    <div class="auth-brandside">
+        <div class="auth-brandtop">
+            <div class="auth-brandtop__icon">
+                <svg width="26" height="26" viewBox="0 0 64 64" fill="none">
+                    <line x1="32" y1="48" x2="32" y2="34" stroke="white" stroke-width="5" stroke-linecap="round"/>
+                    <path d="M32 34 C26 25 15 22 15 12 C15 12 27 12 32 24" fill="white" opacity="0.96"/>
+                    <path d="M32 30 C37 22 47 20 49 12 C49 12 41 14 36 24" fill="white" opacity="0.68"/>
                 </svg>
             </div>
-            <span class="auth-brand-name">Meu Agrônomo</span>
+            <span class="auth-brandtop__name">Meu Agrônomo</span>
         </div>
 
-        <div class="auth-panel-left-content">
-            <h2>
-                Gestão agrícola
-                <strong>simples e eficiente.</strong>
-            </h2>
-            <p>Gerencie clientes, agende visitas técnicas e acompanhe seu trabalho em campo em um só lugar.</p>
+        <div class="auth-pitch">
+            <div class="t-eyebrow" style="color:rgba(255,255,255,.7);margin-bottom:20px;">Gestão agrícola</div>
+            <h1 class="t-display" style="color:#fff;margin:0;">O campo,<br>em ordem.</h1>
+            <p>O espaço onde o agrônomo organiza clientes, visitas e resultados — com a calma de quem está no controle.</p>
+            <ul class="auth-pitch__points">
+                <li>
+                    <span class="auth-pitch__check">
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                    </span>
+                    Cadastre clientes e propriedades em segundos
+                </li>
+                <li>
+                    <span class="auth-pitch__check">
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                    </span>
+                    Agende visitas técnicas sem planilhas
+                </li>
+                <li>
+                    <span class="auth-pitch__check">
+                        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                    </span>
+                    Relatórios de campo organizados em um só lugar
+                </li>
+            </ul>
         </div>
 
-        <div class="auth-panel-left-footer">
-            © {{ date('Y') }} Meu Agrônomo
-        </div>
+        <div class="auth-foot">© 2026 Meu Agrônomo</div>
     </div>
 
-    {{-- Painel direito —————————————————————————————— --}}
-    <div class="auth-panel-right">
-        <div class="auth-form-container">
+    {{-- Lado direito: formulário --}}
+    <div class="auth-formside">
+        <div class="auth-form-wrap">
+            <h2>Bem-vindo de volta</h2>
+            <p>Entre com suas credenciais para continuar.</p>
 
-            <div class="auth-form-header">
-                <h1>Bem-vindo</h1>
-                <p>Entre com suas credenciais para continuar.</p>
-            </div>
+            @if(session('error'))
+                <div class="alert alert-danger">{{ session('error') }}</div>
+            @endif
 
-            <form method="POST" action="{{ route('login') }}">
+            <form action="{{ route('login') }}" method="POST">
                 @csrf
-
                 <div class="auth-field">
-                    <label for="email">E-mail</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        required
-                        placeholder="seu@email.com"
-                        value="{{ old('email') }}"
-                        autofocus
-                    >
+                    <label class="field-label">E-MAIL</label>
+                    <input class="input" type="email" name="email"
+                           value="{{ old('email') }}" placeholder="seu@email.com" required>
                     @error('email')
-                        <span class="invalid-feedback">{{ $message }}</span>
+                        <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <div class="auth-field">
-                    <label for="password">Senha</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        required
-                        placeholder="••••••••"
-                    >
+                    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px;">
+                        <label class="field-label" style="margin-bottom:0;">SENHA</label>
+                        @if (Route::has('password.request'))
+                            <a class="auth-link" href="{{ route('password.request') }}" style="font-size:12.5px;">Esqueceu?</a>
+                        @endif
+                    </div>
+                    <input class="input" type="password" name="password" placeholder="••••••••" required>
                     @error('password')
-                        <span class="invalid-feedback">{{ $message }}</span>
+                        <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <button type="submit" class="btn-primary">Entrar</button>
+                <button class="btn btn-primary btn-lg btn-block" type="submit" style="margin-top:8px;">
+                    Entrar
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                </button>
             </form>
 
             <div class="auth-links">
-                <a href="{{ route('password.request') }}" class="auth-link">Esqueceu sua senha?</a>
-                <a href="{{ route('register') }}" class="auth-link-cta">Primeiro acesso? Cadastre-se</a>
+                @if (Route::has('register'))
+                    <a class="auth-link-cta" href="{{ route('register') }}">Criar conta gratuita</a>
+                @endif
+                <span class="auth-link" style="font-size:12px;color:var(--text-mute);">
+                    © 2026 Meu Agrônomo
+                </span>
             </div>
-
         </div>
     </div>
 
