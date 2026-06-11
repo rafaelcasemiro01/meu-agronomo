@@ -17,6 +17,7 @@ class User extends Authenticatable
         'password',
         'data_nascimento',
         'celular',
+        'crea',
     ];
 
     protected $hidden = [
@@ -47,7 +48,7 @@ class User extends Authenticatable
     }
 
     /**
-     * NOVO: Um usuário (agrônomo) pode ter muitos relatórios.
+     * Um usuário (agrônomo) pode ter muitos relatórios.
      */
     public function relatorios(): HasMany
     {

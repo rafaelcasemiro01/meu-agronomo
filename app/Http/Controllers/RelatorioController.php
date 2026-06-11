@@ -162,6 +162,18 @@ class RelatorioController extends Controller
     }
 
     /**
+     * Documento de impressão / PDF (layout A4, sem o painel).
+     */
+    public function imprimir(Relatorio $relatorio)
+    {
+        $this->autorizar($relatorio);
+        $relatorio->load('cliente', 'visitaTecnica');
+        $agronomo = Auth::user();
+
+        return view('relatorios.imprimir', compact('relatorio', 'agronomo'));
+    }
+
+    /**
      * Marca um relatório como finalizado.
      */
     public function finalizar(Relatorio $relatorio)

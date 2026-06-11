@@ -66,4 +66,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // --- Relatórios (NOVO) ---
     Route::resource('relatorios', RelatorioController::class);
     Route::patch('/relatorios/{relatorio}/finalizar', [RelatorioController::class, 'finalizar'])->name('relatorios.finalizar');
+    Route::get('/relatorios/{relatorio}/imprimir', [RelatorioController::class, 'imprimir'])->name('relatorios.imprimir');
 });

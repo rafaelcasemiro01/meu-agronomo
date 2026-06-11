@@ -29,11 +29,11 @@
             <div class="ma-sidebar__brand">
                 <div class="sidebar-brand">
                     <div class="sidebar-brand-icon">
-                        <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M32 50V37" stroke="currentColor" stroke-width="4.3" stroke-linecap="round"/>
+                        <svg width="20" height="20" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M32 50V37" stroke="white" stroke-width="4.3" stroke-linecap="round"/>
                             <g transform="translate(32,38)">
-                                <path transform="rotate(27)" d="M0 0C-8.5-11-7-26 0-35 7-26 8.5-11 0 0Z" fill="currentColor"/>
-                                <path transform="rotate(-29) scale(0.9)" d="M0 0C-8.5-11-7-26 0-35 7-26 8.5-11 0 0Z" fill="currentColor"/>
+                                <path transform="rotate(27)" d="M0 0C-8.5-11-7-26 0-35 7-26 8.5-11 0 0Z" fill="white"/>
+                                <path transform="rotate(-29) scale(0.9)" d="M0 0C-8.5-11-7-26 0-35 7-26 8.5-11 0 0Z" fill="white"/>
                             </g>
                         </svg>
                     </div>
@@ -60,7 +60,7 @@
                 <div class="t-eyebrow" style="padding: 14px 8px 5px;">Gestão</div>
 
                 <a href="{{ route('clientes.index') }}"
-                   class="ma-nav__link {{ Request::routeIs('clientes.index') || Request::routeIs('clientes.edit') ? 'active' : '' }}">
+                   class="ma-nav__link {{ Request::routeIs('clientes.index') || Request::routeIs('clientes.edit') || Request::routeIs('clientes.show') ? 'active' : '' }}">
                     <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                     Clientes
                 </a>
@@ -144,12 +144,11 @@
                     </div>
                 </div>
 
-                <form class="ma-topbar__search" action="{{ route('clientes.index') }}" method="GET" role="search">
-                    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
-                    <input type="search" name="search" value="{{ request('search') }}" placeholder="Buscar clientes, visitas…">
-                </form>
-
                 <div class="ma-topbar__right">
+                    <form class="ma-topbar__search" action="{{ route('clientes.index') }}" method="GET" role="search">
+                        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
+                        <input type="search" name="search" value="{{ request('search') }}" placeholder="Buscar clientes, visitas…">
+                    </form>
                     <button class="ma-theme-btn" id="maThemeBtn" aria-label="Alternar tema">
                         <svg id="iconSun" viewBox="0 0 24 24" style="display:none">
                             <circle cx="12" cy="12" r="5"/>
@@ -166,8 +165,9 @@
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
                         </svg>
                     </button>
-                    <button class="ma-theme-btn" type="button" aria-label="Notificações" style="position:relative;">
+                    <button class="ma-theme-btn ma-bell" type="button" aria-label="Notificações">
                         <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        <span class="ma-bell__dot"></span>
                     </button>
                     <div class="ma-user-avatar" title="{{ Auth::user()->name }}">
                         {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
@@ -185,7 +185,6 @@
     </div>{{-- /.ma-shell --}}
 
     <script defer>
-        // --- Sidebar (mobile) ---
         const sidebar  = document.getElementById('maSidebar');
         const scrim    = document.getElementById('maScrim');
         const menuBtn  = document.getElementById('maMenuBtn');
@@ -198,7 +197,6 @@
         closeBtn.addEventListener('click', closeSidebar);
         scrim.addEventListener('click', closeSidebar);
 
-        // --- Dark mode ---
         const themeBtn  = document.getElementById('maThemeBtn');
         const iconSun   = document.getElementById('iconSun');
         const iconMoon  = document.getElementById('iconMoon');

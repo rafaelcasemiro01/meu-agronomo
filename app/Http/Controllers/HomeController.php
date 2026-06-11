@@ -54,6 +54,9 @@ class HomeController extends Controller
         $totalRelatorios     = $user->relatorios()->count();
         $relatoriosRascunho  = $user->relatorios()->where('status', 'rascunho')->count();
 
+        // --- Área total acompanhada (soma de hectares dos clientes ativos) ---
+        $areaTotal = (float) $user->clientes()->where('status', true)->sum('area_total_ha');
+
         // --- Aviso dinâmico abaixo da saudação ---
         $partes = [];
         if ($visitasAmanha > 0) {
@@ -86,7 +89,7 @@ class HomeController extends Controller
 
         return view('home', compact(
             'saudacao', 'dataExtenso', 'primeiroNome', 'aviso',
-            'totalClientes', 'clientesAtivos', 'novosMes',
+            'totalClientes', 'clientesAtivos', 'novosMes', 'areaTotal',
             'visitasAgendadas', 'visitasAmanha',
             'totalRelatorios', 'relatoriosRascunho',
             'proximasVisitas', 'clientes'

@@ -64,15 +64,6 @@
     {{-- Lado direito: formulário --}}
     <div class="auth-formside">
         <div class="auth-form-wrap">
-            <div class="auth-mobile-mark">
-                <svg viewBox="0 0 64 64" fill="none">
-                    <path d="M32 50V37" stroke="currentColor" stroke-width="4.3" stroke-linecap="round"/>
-                    <g transform="translate(32,38)">
-                        <path transform="rotate(27)" d="M0 0C-8.5-11-7-26 0-35 7-26 8.5-11 0 0Z" fill="currentColor"/>
-                        <path transform="rotate(-29) scale(0.9)" d="M0 0C-8.5-11-7-26 0-35 7-26 8.5-11 0 0Z" fill="currentColor"/>
-                    </g>
-                </svg>
-            </div>
             <h2>Bem-vindo de volta</h2>
             <p>Entre com suas credenciais para continuar.</p>
 

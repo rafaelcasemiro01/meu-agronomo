@@ -68,13 +68,18 @@
 
         <div class="card ma-stat">
             <div class="ma-stat__top">
-                <span class="t-eyebrow">Novos este mês</span>
+                <span class="t-eyebrow">Área acompanhada</span>
                 <span class="ma-stat__ic">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 15l5-5 3.5 3.5L20 6"/><polyline points="15 6 20 6 20 11"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7l4-3 8 3 4-2v13l-4 2-8-3-4 3Z"/><path d="M8 4v13M16 7v13"/></svg>
                 </span>
             </div>
-            <div class="ma-stat__val"><span class="ma-stat__num">{{ $novosMes ?? 0 }}</span></div>
-            <div class="ma-stat__sub">últimos 30 dias</div>
+            @php
+                $areaVal = $areaTotal ?? 0;
+                $areaNum = $areaVal >= 1000 ? number_format($areaVal / 1000, 1, ',', '.') : number_format($areaVal, 0, ',', '.');
+                $areaSub = $areaVal >= 1000 ? 'mil hectares' : 'hectares';
+            @endphp
+            <div class="ma-stat__val"><span class="ma-stat__num">{{ $areaNum }}</span></div>
+            <div class="ma-stat__sub">{{ $areaSub }}</div>
         </div>
     </div>
 

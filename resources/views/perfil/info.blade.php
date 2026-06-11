@@ -62,6 +62,12 @@
                         @error('data_nascimento')<span class="text-danger">{{ $message }}</span>@enderror
                     </div>
                 </div>
+                <div class="form-group">
+                    <label>Registro profissional (CREA)</label>
+                    <input type="text" name="crea" value="{{ old('crea', $user->crea) }}" placeholder="Ex.: 123456-D/GO">
+                    <div class="t-mute" style="font-size:12px; margin-top:6px;">Aparece automaticamente na assinatura dos relatórios em PDF.</div>
+                    @error('crea')<span class="text-danger">{{ $message }}</span>@enderror
+                </div>
                 <div class="form-actions">
                     <button type="submit" class="btn-salvar">Salvar dados</button>
                 </div>

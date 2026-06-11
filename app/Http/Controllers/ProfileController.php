@@ -7,7 +7,7 @@ use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth; // <-- Adicione esta linha
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
@@ -18,9 +18,8 @@ class ProfileController extends Controller
 
     public function editInfo()
     {
-        // Use a facade Auth::user()
         /** @var \App\Models\User $user */
-        $user = Auth::user(); // <-- Alterado aqui
+        $user = Auth::user();
 
         return view('perfil.info', [
             'user' => $user,
@@ -29,18 +28,18 @@ class ProfileController extends Controller
 
     public function updateInfo(Request $request)
     {
-        // Use a facade Auth::user()
         /** @var \App\Models\User $user */
-        $user = Auth::user(); // <-- Alterado aqui
+        $user = Auth::user();
 
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-             'celular' => ['nullable', 'string', 'max:20'], // Validação para celular
-            'data_nascimento' => ['nullable', 'date'], // Validação para data de nascimento
+            'name'            => ['required', 'string', 'max:255'],
+            'email'           => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'celular'         => ['nullable', 'string', 'max:20'],
+            'data_nascimento' => ['nullable', 'date'],
+            'crea'            => ['nullable', 'string', 'max:30'], // Registro profissional
         ]);
 
-        $user->fill($request->only('name', 'email', 'celular', 'data_nascimento'));
+        $user->fill($request->only('name', 'email', 'celular', 'data_nascimento', 'crea'));
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
@@ -60,12 +59,11 @@ class ProfileController extends Controller
     {
         $request->validate([
             'current_password' => ['required', 'string'],
-            'password' => ['required', Rules\Password::defaults(), 'confirmed'],
+            'password'         => ['required', Rules\Password::defaults(), 'confirmed'],
         ]);
 
-        // Use a facade Auth::user()
         /** @var \App\Models\User $user */
-        $user = Auth::user(); // <-- Alterado aqui
+        $user = Auth::user();
 
         if (! Hash::check($request->current_password, $user->password)) {
             throw ValidationException::withMessages([
