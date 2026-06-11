@@ -9,9 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
-    // Remova ou mantenha 'HasApiTokens' aqui com base na sua decisão.
-    // use HasApiTokens, HasFactory, Notifiable; // Original se usando Sanctum
-    use HasFactory, Notifiable; // Se você NÃO USA Sanctum, use esta linha
+    use HasFactory, Notifiable;
 
     protected $fillable = [
         'name',
@@ -29,7 +27,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'data_nascimento' => 'date', // Certifique-se de que está aqui para o cast de data
+        'data_nascimento' => 'date',
     ];
 
     /**
@@ -41,11 +39,19 @@ class User extends Authenticatable
     }
 
     /**
-     * NOVO: Um usuário (agrônomo) pode ter muitas visitas técnicas.
+     * Um usuário (agrônomo) pode ter muitas visitas técnicas.
      */
     public function visitas(): HasMany
     {
         return $this->hasMany(VisitaTecnica::class);
+    }
+
+    /**
+     * NOVO: Um usuário (agrônomo) pode ter muitos relatórios.
+     */
+    public function relatorios(): HasMany
+    {
+        return $this->hasMany(Relatorio::class);
     }
 
     /**

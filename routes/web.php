@@ -6,6 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VisitaTecnicaController;
+use App\Http\Controllers\RelatorioController; // NOVO
 
 /*
 |--------------------------------------------------------------------------
@@ -13,47 +14,38 @@ use App\Http\Controllers\VisitaTecnicaController;
 |--------------------------------------------------------------------------
 */
 
-// Rotas de autenticação padrão do Laravel (login, register, reset, etc.)
-// Ajustei para o seu login e registro customizados se necessário,
-// mas o Auth::routes() é o padrão.
 Auth::routes([
     'login'      => true,
     'register'   => true,
     'reset'      => true,
-    'verify'     => false, // Conforme sua configuração
+    'verify'     => false,
 ]);
 
-// Rota para a tela de login (personalizada)
 Route::get('/login', function () {
-    return view('index'); // Aponta para resources/views/index.blade.php
+    return view('index');
 })->name('login');
 
-// Rota para a tela de registro (personalizada)
 Route::get('/register', function () {
-    return view('cadastro'); // Aponta para resources/views/cadastro.blade.php
+    return view('cadastro');
 })->name('register');
 
-// Redireciona a rota raiz '/' para a tela de login
 Route::get('/', function () {
     return redirect()->route('login');
 });
 
-// Este grupo de middleware garante que as rotas dentro dele
-// só podem ser acessadas por usuários autenticados e verificados.
 Route::middleware(['auth', 'verified'])->group(function () {
 
-    // --- Rotas do Dashboard ---
+    // --- Dashboard ---
     Route::get('/dashboard', [HomeController::class, 'index'])->name('dashboard');
-    Route::get('/home', function () { // Redireciona /home para /dashboard
+    Route::get('/home', function () {
         return redirect()->route('dashboard');
     })->name('home');
 
-    // --- Rotas de Clientes (Resourceful) ---
+    // --- Clientes ---
     Route::resource('clientes', ClienteController::class);
-    // Rota para reativar cliente (usando PATCH para atualização de status)
     Route::patch('/clientes/{cliente}/activate', [ClienteController::class, 'activate'])->name('clientes.activate');
 
-    // --- Rotas de Perfil ---
+    // --- Perfil ---
     Route::prefix('perfil')->name('perfil.')->group(function () {
         Route::get('/info', [ProfileController::class, 'editInfo'])->name('info');
         Route::patch('/info', [ProfileController::class, 'updateInfo'])->name('update.info');
@@ -62,22 +54,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::patch('/senha', [ProfileController::class, 'updatePassword'])->name('update.senha');
     });
 
-    // --- Rotas de Visitas Técnicas ---
+    // --- Visitas Técnicas ---
     Route::prefix('visitas')->name('visitas.')->group(function () {
-        // Agendamento de Visita (formulário e salvamento)
         Route::get('/agendar', [VisitaTecnicaController::class, 'create'])->name('agendar');
         Route::post('/', [VisitaTecnicaController::class, 'store'])->name('store');
-
-        // Listagem de Visitas
         Route::get('/minhas', [VisitaTecnicaController::class, 'minhasVisitas'])->name('minhas');
-
-        // Rotas de Ações para Visitas (cancelar, realizar)
         Route::patch('/{visita}/cancelar', [VisitaTecnicaController::class, 'cancelar'])->name('cancelar');
-        Route::patch('/{visita}/realizar', [VisitaTecnicaController::class, 'realizar'])->name('realizar'); // <-- NOVA ROTA AQUI
+        Route::patch('/{visita}/realizar', [VisitaTecnicaController::class, 'realizar'])->name('realizar');
     });
-    // Adicione mais rotas para CRUD completo de visitas se necessário no futuro
-    // Ex: Route::get('/visitas/{visita}', [VisitaTecnicaController::class, 'show'])->name('visitas.show');
-    // Ex: Route::get('/visitas/{visita}/edit', [VisitaTecnicaController::class, 'edit'])->name('visitas.edit');
-    // Ex: Route::put('/visitas/{visita}', [VisitaTecnicaController::class, 'update'])->name('visitas.update');
-    // Ex: Route::delete('/visitas/{visita}', [VisitaTecnicaController::class, 'destroy'])->name('visitas.destroy');
+
+    // --- Relatórios (NOVO) ---
+    Route::resource('relatorios', RelatorioController::class);
+    Route::patch('/relatorios/{relatorio}/finalizar', [RelatorioController::class, 'finalizar'])->name('relatorios.finalizar');
 });

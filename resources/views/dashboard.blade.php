@@ -82,6 +82,11 @@
                     <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                     Minhas visitas
                 </a>
+                <a href="{{ route('relatorios.index') }}"
+                   class="ma-nav__link indent {{ Request::routeIs('relatorios.*') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24"><path d="M6 3.5h8l4 4V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z"/><path d="M13.5 3.5V8h4"/><path d="M8.5 13h7M8.5 16.5h5"/></svg>
+                    Relatórios
+                </a>
 
                 <div class="t-eyebrow" style="padding: 14px 8px 5px;">Conta</div>
 

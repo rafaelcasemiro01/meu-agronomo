@@ -6,18 +6,12 @@
 @section('main-content')
 <div class="ma-page">
 
-    @php
-        $hora = now()->hour;
-        $saudacao = $hora < 12 ? 'Bom dia' : ($hora < 18 ? 'Boa tarde' : 'Boa noite');
-        $primeiroNome = explode(' ', trim(Auth::user()->name))[0];
-    @endphp
-
     {{-- SAUDAÇÃO --}}
     <div class="ma-greet">
         <div>
-            <div class="ma-greet__eyebrow">{{ ucfirst(now()->translatedFormat('l · d M Y')) }}</div>
-            <h1>{{ $saudacao }}, {{ $primeiroNome }}.</h1>
-            <p>Acompanhe seus clientes e visitas técnicas em um só lugar.</p>
+            <div class="ma-greet__eyebrow">{{ $dataExtenso ?? '' }}</div>
+            <h1>{{ $saudacao ?? 'Olá' }}, {{ $primeiroNome ?? '' }}.</h1>
+            <p>{!! $aviso ?? 'Acompanhe seus clientes e visitas técnicas em um só lugar.' !!}</p>
         </div>
         <div class="ma-greet__actions">
             <a href="{{ route('clientes.create') }}" class="btn btn-ghost">
@@ -55,16 +49,22 @@
             <div class="ma-stat__sub">nos próximos 7 dias</div>
         </div>
 
-        <div class="card ma-stat">
+        <a href="{{ route('relatorios.index') }}" class="card ma-stat" style="text-decoration:none; color:inherit;">
             <div class="ma-stat__top">
-                <span class="t-eyebrow">Clientes cadastrados</span>
+                <span class="t-eyebrow">Relatórios</span>
                 <span class="ma-stat__ic">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h8l4 4V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4.5a1 1 0 0 1 1-1Z"/><path d="M13.5 3.5V8h4"/><path d="M8.5 13h7M8.5 16.5h5"/></svg>
                 </span>
             </div>
-            <div class="ma-stat__val"><span class="ma-stat__num">{{ $totalClientes ?? 0 }}</span></div>
-            <div class="ma-stat__sub">no total</div>
-        </div>
+            <div class="ma-stat__val"><span class="ma-stat__num">{{ $totalRelatorios ?? 0 }}</span></div>
+            <div class="ma-stat__sub">
+                @if(($relatoriosRascunho ?? 0) > 0)
+                    {{ $relatoriosRascunho }} em rascunho
+                @else
+                    todos finalizados
+                @endif
+            </div>
+        </a>
 
         <div class="card ma-stat">
             <div class="ma-stat__top">
@@ -98,7 +98,7 @@
                 @endphp
                 <a href="{{ route('visitas.minhas') }}" class="ma-visitrow">
                     <div class="ma-visitrow__date">
-                        <span class="ma-visitrow__day">{{ optional($v->data_visita)->translatedFormat('d M') ?? '—' }}</span>
+                        <span class="ma-visitrow__day">{{ optional($v->data_visita)->locale('pt_BR')->isoFormat('D MMM') ?? '—' }}</span>
                         <span class="ma-visitrow__time">{{ \Illuminate\Support\Str::substr($v->hora_visita, 0, 5) }}</span>
                     </div>
                     <div class="ma-visitrow__avatar">{{ strtoupper(\Illuminate\Support\Str::substr($nomeCliente, 0, 2)) }}</div>
@@ -116,20 +116,20 @@
             @endforelse
         </section>
 
-        {{-- Atividade recente (clientes recém-cadastrados) --}}
+        {{-- Clientes recentes --}}
         <section class="card ma-block">
             <div class="ma-block__head">
                 <h3>Clientes recentes</h3>
             </div>
 
             @forelse(($clientes ?? []) as $c)
-                <a href="{{ route('clientes.edit', $c) }}" class="ma-activity__row" style="text-decoration:none;color:inherit;">
+                <a href="{{ route('clientes.show', $c) }}" class="ma-activity__row" style="text-decoration:none;color:inherit;">
                     <span class="ma-activity__ic">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 12 0v1"/></svg>
                     </span>
                     <div>
                         <div class="ma-activity__txt"><b>{{ $c->nome }}</b> · {{ $c->nome_propriedade }}</div>
-                        <div class="ma-activity__when">{{ $c->cidade }}/{{ $c->estado }} · {{ optional($c->created_at)->diffForHumans() }}</div>
+                        <div class="ma-activity__when">{{ $c->cidade }}/{{ $c->estado }} · {{ optional($c->created_at)->locale('pt_BR')->diffForHumans() }}</div>
                     </div>
                 </a>
             @empty
