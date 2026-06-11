@@ -1,3 +1,11 @@
+/*
+ | Meu Agrônomo — folha de estilo principal
+ |
+ | O Bootstrap foi REMOVIDO de propósito. Ele sobrescrevia os botões do
+ | design "Sereno": deixava o "Agendar visita" azul e o texto do
+ | "Novo cliente" (ghost) quase invisível no modo escuro.
+ |
+ | Todo o app usa classes próprias (.ma-*, .btn, .auth-*, .form-*),
+ | então não há nenhuma dependência do CSS do Bootstrap.
+ */
 @import 'style.css';
-
-@import 'bootstrap/dist/css/bootstrap.min.css';

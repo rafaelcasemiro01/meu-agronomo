@@ -763,4 +763,41 @@ body.auth-body {
   .ma-topbar { padding: 0 20px; }
   .ma-topbar__title, .ma-topbar__search { display: none; }
   .ma-topbar__brand { display: flex; }
+
+  /* No mobile, o botão de fechar a sidebar reaparece */
+  .ma-sidebar__brand .ma-iconbtn { display: grid; }
 }
+
+/* ============================================================
+   CORREÇÕES DE INTERFACE (v7)
+   ============================================================ */
+
+/* Botão "X" de fechar a sidebar: só deve aparecer no mobile.
+   No desktop ele não faz sentido (a sidebar é fixa). */
+.ma-sidebar__brand .ma-iconbtn { display: none; }
+
+/* Scrollbar da navegação lateral: discreta, como no protótipo.
+   (Continua rolável quando há muitos itens, mas sem a barra visível.) */
+.ma-nav { scrollbar-width: none; -ms-overflow-style: none; }
+.ma-nav::-webkit-scrollbar { width: 0; height: 0; }
+
+/* Paginação (Laravel) — estilo Sereno, funciona sem o CSS do Bootstrap.
+   Requer Paginator::useBootstrapFive() no AppServiceProvider. */
+.pagination {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 4px;
+  list-style: none; padding: 0; margin: 0;
+}
+.pagination .page-item .page-link {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 36px; height: 36px; padding: 0 11px;
+  border: 1px solid var(--border-soft); border-radius: 10px;
+  background: var(--surface); color: var(--text-dim);
+  font-size: 13.5px; font-weight: 600; text-decoration: none;
+  transition: background .15s, color .15s, border-color .15s;
+}
+.pagination .page-item .page-link:hover { background: var(--surface-2); color: var(--text); }
+.pagination .page-item.active .page-link {
+  background: var(--primary); border-color: var(--primary); color: var(--primary-ink);
+}
+.pagination .page-item.disabled .page-link { opacity: .45; pointer-events: none; }
+.pagination svg { width: 16px; height: 16px; }

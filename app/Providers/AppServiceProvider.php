@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Pagination\Paginator; // NOVO
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,5 +23,10 @@ class AppServiceProvider extends ServiceProvider
         if (config('app.env') === 'production') {
             \URL::forceScheme('https');
         }
+
+        // Faz a paginação usar a marcação .pagination/.page-item/.page-link,
+        // que é estilizada no style.css (no padrão Sereno) — sem depender do
+        // CSS do Bootstrap, que foi removido.
+        Paginator::useBootstrapFive();
     }
 }
