@@ -1,7 +1,3 @@
-{{--
-    PERFIL — ALTERAR SENHA
-    Rota: perfil.senha (GET)  ·  Envia para: perfil.senha.atualizar (PUT)  [ajuste o nome se diferente]
---}}
 @extends('dashboard')
 @section('page-title', 'Alterar senha — Meu Agrônomo')
 @section('topbar-title', 'Alterar senha')
@@ -23,26 +19,26 @@
 
     @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
 
-    <div class="form-page">
+    <div class="form-page" style="max-width:520px;">
         <div class="form-card">
-            <form action="{{ route('perfil.senha.atualizar') }}" method="POST">
+            <form action="{{ route('perfil.update.senha') }}" method="POST">
                 @csrf
-                @method('PUT')
+                @method('PATCH')
 
                 <div class="form-group">
-                    <label>Senha atual</label>
+                    <label>Senha atual *</label>
                     <input type="password" name="current_password" placeholder="••••••••" required>
                     @error('current_password')<span class="text-danger">{{ $message }}</span>@enderror
                 </div>
 
                 <div class="form-group">
-                    <label>Nova senha</label>
+                    <label>Nova senha *</label>
                     <input type="password" name="password" placeholder="Mín. 8 caracteres" required>
                     @error('password')<span class="text-danger">{{ $message }}</span>@enderror
                 </div>
 
                 <div class="form-group">
-                    <label>Confirmar nova senha</label>
+                    <label>Confirmar nova senha *</label>
                     <input type="password" name="password_confirmation" placeholder="••••••••" required>
                 </div>
 

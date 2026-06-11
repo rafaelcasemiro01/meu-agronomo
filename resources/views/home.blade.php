@@ -1,16 +1,3 @@
-{{--
-    ============================================================
-    DASHBOARD — CONTEÚDO (Início)
-    Estende o layout em resources/views/dashboard.blade.php
-    Aponte sua rota /dashboard para esta view, OU cole o
-    @section('main-content') dentro da sua view de conteúdo atual.
-
-    Variáveis esperadas do controller (todas com fallback seguro):
-      $totalClientes, $clientesAtivos, $visitasAgendadas, $novosMes
-      $proximasVisitas  (coleção; cada item: ->cliente, ->tipo, ->data, ->hora)
-      $atividades       (coleção; cada item: ->titulo, ->descricao, ->quando)
-    ============================================================
---}}
 @extends('dashboard')
 
 @section('page-title', 'Início — Meu Agrônomo')
@@ -105,15 +92,19 @@
             </div>
 
             @forelse(($proximasVisitas ?? []) as $v)
+                @php
+                    $nomeCliente = optional($v->cliente)->nome ?? 'Cliente';
+                    $sub = optional($v->cliente)->nome_propriedade ?: ($v->local_visita ?? 'Visita técnica');
+                @endphp
                 <a href="{{ route('visitas.minhas') }}" class="ma-visitrow">
                     <div class="ma-visitrow__date">
-                        <span class="ma-visitrow__day">{{ optional($v->data ?? null)->translatedFormat('D') ?? '—' }}</span>
-                        <span class="ma-visitrow__time">{{ $v->hora ?? '' }}</span>
+                        <span class="ma-visitrow__day">{{ optional($v->data_visita)->translatedFormat('d M') ?? '—' }}</span>
+                        <span class="ma-visitrow__time">{{ \Illuminate\Support\Str::substr($v->hora_visita, 0, 5) }}</span>
                     </div>
-                    <div class="ma-visitrow__avatar">{{ strtoupper(substr($v->cliente ?? 'CL', 0, 2)) }}</div>
+                    <div class="ma-visitrow__avatar">{{ strtoupper(\Illuminate\Support\Str::substr($nomeCliente, 0, 2)) }}</div>
                     <div class="ma-visitrow__main">
-                        <div class="ma-visitrow__client">{{ $v->cliente ?? 'Cliente' }}</div>
-                        <div class="ma-visitrow__type">{{ $v->tipo ?? 'Visita técnica' }}</div>
+                        <div class="ma-visitrow__client">{{ $nomeCliente }}</div>
+                        <div class="ma-visitrow__type">{{ $sub }}</div>
                     </div>
                     <span class="ma-visitrow__chev"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span>
                 </a>
@@ -125,25 +116,25 @@
             @endforelse
         </section>
 
-        {{-- Atividade recente --}}
+        {{-- Atividade recente (clientes recém-cadastrados) --}}
         <section class="card ma-block">
             <div class="ma-block__head">
-                <h3>Atividade recente</h3>
+                <h3>Clientes recentes</h3>
             </div>
 
-            @forelse(($atividades ?? []) as $a)
-                <div class="ma-activity__row">
+            @forelse(($clientes ?? []) as $c)
+                <a href="{{ route('clientes.edit', $c) }}" class="ma-activity__row" style="text-decoration:none;color:inherit;">
                     <span class="ma-activity__ic">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 12 0v1"/></svg>
                     </span>
                     <div>
-                        <div class="ma-activity__txt"><b>{{ $a->titulo ?? '' }}</b> {{ $a->descricao ?? '' }}</div>
-                        <div class="ma-activity__when">{{ $a->quando ?? '' }}</div>
+                        <div class="ma-activity__txt"><b>{{ $c->nome }}</b> · {{ $c->nome_propriedade }}</div>
+                        <div class="ma-activity__when">{{ $c->cidade }}/{{ $c->estado }} · {{ optional($c->created_at)->diffForHumans() }}</div>
                     </div>
-                </div>
+                </a>
             @empty
                 <div class="empty-state" style="padding:32px 12px;">
-                    Suas ações aparecerão aqui conforme você usar o sistema.
+                    Seus clientes aparecerão aqui conforme você cadastrar.
                 </div>
             @endforelse
 

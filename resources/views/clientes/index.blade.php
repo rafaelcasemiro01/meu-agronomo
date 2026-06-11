@@ -1,9 +1,3 @@
-{{--
-    CLIENTES — LISTA
-    Rota: clientes.index  (GET)   ·  Variável esperada: $clientes (coleção/paginator)
-    Rotas usadas: clientes.create, clientes.edit, clientes.destroy
-    Campos lidos (ajuste ao seu model): ->id, ->nome, ->cpf, ->telefone, ->cidade, ->uf, ->status
---}}
 @extends('dashboard')
 @section('page-title', 'Clientes — Meu Agrônomo')
 @section('topbar-title', 'Clientes')
@@ -25,10 +19,14 @@
     @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
     @if(session('error'))<div class="alert alert-danger">{{ session('error') }}</div>@endif
 
+    @php $statusAtual = request('status', 'ativo'); @endphp
     <div class="filter-bar">
-        <a href="{{ route('clientes.index') }}" class="filter-btn {{ !request('status') ? 'active-filtro' : '' }}">Todos</a>
-        <a href="{{ route('clientes.index', ['status' => 'ativo']) }}" class="filter-btn {{ request('status') == 'ativo' ? 'active-filtro' : '' }}">Ativos</a>
-        <a href="{{ route('clientes.index', ['status' => 'inativo']) }}" class="filter-btn {{ request('status') == 'inativo' ? 'active-filtro' : '' }}">Inativos</a>
+        <a href="{{ route('clientes.index', array_filter(['status' => 'ativo', 'search' => request('search')])) }}"
+           class="filter-btn {{ $statusAtual == 'ativo' ? 'active-filtro' : '' }}">Ativos</a>
+        <a href="{{ route('clientes.index', array_filter(['status' => 'inativo', 'search' => request('search')])) }}"
+           class="filter-btn {{ $statusAtual == 'inativo' ? 'active-filtro' : '' }}">Inativos</a>
+        <a href="{{ route('clientes.index', array_filter(['status' => 'todos', 'search' => request('search')])) }}"
+           class="filter-btn {{ $statusAtual == 'todos' ? 'active-filtro' : '' }}">Todos</a>
     </div>
 
     <div class="tabela-wrapper">
@@ -36,39 +34,54 @@
             <thead>
                 <tr>
                     <th>Cliente</th>
+                    <th>Propriedade</th>
                     <th>Contato</th>
-                    <th>Localização</th>
                     <th>Status</th>
                     <th style="text-align:right;">Ações</th>
                 </tr>
             </thead>
             <tbody>
-            @forelse(($clientes ?? []) as $cliente)
+            @forelse($clientes as $cliente)
                 <tr>
                     <td>
                         <div class="cliente-info">
-                            <div class="cliente-avatar">{{ strtoupper(substr($cliente->nome ?? 'CL', 0, 2)) }}</div>
+                            <div class="cliente-avatar">{{ strtoupper(\Illuminate\Support\Str::substr($cliente->nome, 0, 2)) }}</div>
                             <div>
-                                <div class="cliente-nome">{{ $cliente->nome ?? '—' }}</div>
-                                <div class="cliente-cpf">{{ $cliente->cpf ?? '' }}</div>
+                                <div class="cliente-nome">{{ $cliente->nome }}</div>
+                                <div class="cliente-cpf">{{ $cliente->cpf }}</div>
                             </div>
                         </div>
                     </td>
-                    <td>{{ $cliente->telefone ?? '—' }}</td>
-                    <td>{{ $cliente->cidade ?? '—' }}{{ !empty($cliente->uf) ? '/'.$cliente->uf : '' }}</td>
                     <td>
-                        @php $st = strtolower($cliente->status ?? 'ativo'); @endphp
-                        <span class="status-badge status-{{ $st }}">{{ ucfirst($st) }}</span>
+                        <div style="font-weight:600;font-size:13.5px;">{{ $cliente->nome_propriedade }}</div>
+                        <div class="cliente-cpf">{{ $cliente->cidade }}/{{ $cliente->estado }} · {{ rtrim(rtrim(number_format($cliente->area_total_ha, 2, ',', '.'), '0'), ',') }} ha</div>
+                    </td>
+                    <td>{{ $cliente->contato }}</td>
+                    <td>
+                        @if($cliente->status)
+                            <span class="status-badge status-ativo">Ativo</span>
+                        @else
+                            <span class="status-badge status-inativo">Inativo</span>
+                        @endif
                     </td>
                     <td>
                         <div class="acoes" style="justify-content:flex-end;">
-                            <a href="{{ route('clientes.edit', $cliente->id ?? 0) }}" class="action-btn edit">Editar</a>
-                            <form action="{{ route('clientes.destroy', $cliente->id ?? 0) }}" method="POST"
-                                  onsubmit="return confirm('Remover este cliente?');" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="action-btn danger">Remover</button>
-                            </form>
+                            <a href="{{ route('clientes.show', $cliente) }}" class="action-btn edit">Ver</a>
+                            <a href="{{ route('clientes.edit', $cliente) }}" class="action-btn edit">Editar</a>
+                            @if($cliente->status)
+                                <form action="{{ route('clientes.destroy', $cliente) }}" method="POST"
+                                      onsubmit="return confirm('Inativar este cliente?');" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="action-btn danger">Inativar</button>
+                                </form>
+                            @else
+                                <form action="{{ route('clientes.activate', $cliente) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="action-btn edit">Reativar</button>
+                                </form>
+                            @endif
                         </div>
                     </td>
                 </tr>
@@ -76,8 +89,12 @@
                 <tr>
                     <td colspan="5">
                         <div class="empty-state">
-                            Nenhum cliente cadastrado ainda.<br>
-                            <a href="{{ route('clientes.create') }}" style="color:var(--primary);font-weight:600;">Adicionar o primeiro →</a>
+                            @if(request('search'))
+                                Nenhum cliente encontrado para “{{ request('search') }}”.
+                            @else
+                                Nenhum cliente cadastrado ainda.<br>
+                                <a href="{{ route('clientes.create') }}" style="color:var(--primary);font-weight:600;">Adicionar o primeiro →</a>
+                            @endif
                         </div>
                     </td>
                 </tr>
@@ -86,8 +103,8 @@
         </table>
     </div>
 
-    @if(isset($clientes) && is_object($clientes) && method_exists($clientes, 'links'))
-        <div style="margin-top:18px;">{{ $clientes->links() }}</div>
+    @if(method_exists($clientes, 'links'))
+        <div style="margin-top:18px;">{{ $clientes->appends(request()->query())->links() }}</div>
     @endif
 
 </div>

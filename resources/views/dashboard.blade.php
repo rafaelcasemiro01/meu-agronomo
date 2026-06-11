@@ -141,7 +141,7 @@
 
                 <form class="ma-topbar__search" action="{{ route('clientes.index') }}" method="GET" role="search">
                     <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
-                    <input type="search" name="q" value="{{ request('q') }}" placeholder="Buscar clientes, visitas…">
+                    <input type="search" name="search" value="{{ request('search') }}" placeholder="Buscar clientes…">
                 </form>
 
                 <div class="ma-topbar__right">

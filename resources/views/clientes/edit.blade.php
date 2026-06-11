@@ -1,11 +1,15 @@
-{{--
-    CLIENTES — EDITAR
-    Rota: clientes.edit (GET, {cliente})  ·  Envia para: clientes.update (PUT, {cliente})
-    Variável esperada: $cliente
---}}
 @extends('dashboard')
 @section('page-title', 'Editar cliente — Meu Agrônomo')
 @section('topbar-title', 'Editar cliente')
+
+@push('styles')
+<style>
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+    @media (max-width: 640px) { .form-grid-2 { grid-template-columns: 1fr; } }
+    .form-sec-title { font-size: 13px; font-weight: 700; letter-spacing: .01em; color: var(--text); margin: 26px 0 16px; padding-top: 22px; border-top: 1px solid var(--border-soft); }
+    .form-sec-title:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+</style>
+@endpush
 
 @section('main-content')
 <div class="ma-page">
@@ -18,64 +22,100 @@
     <div class="page-header">
         <div>
             <div class="page-eyebrow">Gestão · Editar</div>
-            <h2>{{ $cliente->nome ?? 'Editar cliente' }}</h2>
+            <h2>{{ $cliente->nome }}</h2>
         </div>
     </div>
 
-    <div class="form-page">
+    @if($errors->any())
+        <div class="alert alert-danger">Revise os campos destacados abaixo.</div>
+    @endif
+
+    <div class="form-page" style="max-width:760px;">
         <div class="form-card">
-            <form action="{{ route('clientes.update', $cliente->id ?? 0) }}" method="POST">
+            <form action="{{ route('clientes.update', $cliente) }}" method="POST">
                 @csrf
                 @method('PUT')
 
-                <div class="form-group">
-                    <label>Nome completo</label>
-                    <input type="text" name="nome" value="{{ old('nome', $cliente->nome ?? '') }}" required>
-                    @error('nome')<span class="text-danger">{{ $message }}</span>@enderror
+                <div class="form-sec-title">Dados do cliente</div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>Nome completo *</label>
+                        <input type="text" name="nome" value="{{ old('nome', $cliente->nome) }}" required>
+                        @error('nome')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
+                        <label>CPF *</label>
+                        <input type="text" id="cpf" name="cpf" value="{{ old('cpf', $cliente->cpf) }}" required>
+                        @error('cpf')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
+                        <label>RG</label>
+                        <input type="text" name="rg" value="{{ old('rg', $cliente->rg) }}">
+                        @error('rg')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
+                        <label>Contato (WhatsApp) *</label>
+                        <input type="text" id="contato" name="contato" value="{{ old('contato', $cliente->contato) }}" required>
+                        @error('contato')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone fixo</label>
+                        <input type="text" id="telefone" name="telefone" value="{{ old('telefone', $cliente->telefone) }}">
+                        @error('telefone')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>CPF / Documento</label>
-                    <input type="text" name="cpf" value="{{ old('cpf', $cliente->cpf ?? '') }}">
+                <div class="form-sec-title">Endereço</div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>CEP *</label>
+                        <input type="text" id="cep" name="cep" value="{{ old('cep', $cliente->cep) }}" required>
+                        @error('cep')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
+                        <label>Cidade *</label>
+                        <input type="text" name="cidade" value="{{ old('cidade', $cliente->cidade) }}" required>
+                        @error('cidade')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group" style="grid-column:1 / -1;">
+                        <label>Endereço *</label>
+                        <input type="text" name="endereco" value="{{ old('endereco', $cliente->endereco) }}" required>
+                        @error('endereco')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
+                        <label>Estado (UF) *</label>
+                        <select name="estado" required>
+                            <option value="">Selecione…</option>
+                            @foreach(['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'] as $uf)
+                                <option value="{{ $uf }}" {{ old('estado', $cliente->estado) == $uf ? 'selected' : '' }}>{{ $uf }}</option>
+                            @endforeach
+                        </select>
+                        @error('estado')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Cultura principal</label>
-                    <select name="cultura">
-                        <option value="">Selecione…</option>
-                        @foreach(['Soja','Milho','Café','Cana','Algodão','Hortaliças','Citros','Trigo','Feijão','Pastagem'] as $c)
-                            <option value="{{ $c }}" {{ old('cultura', $cliente->cultura ?? '') == $c ? 'selected' : '' }}>{{ $c }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Cidade / UF</label>
-                    <input type="text" name="cidade" value="{{ old('cidade', $cliente->cidade ?? '') }}">
-                </div>
-
-                <div class="form-group">
-                    <label>Telefone / WhatsApp</label>
-                    <input type="text" name="telefone" value="{{ old('telefone', $cliente->telefone ?? '') }}">
-                </div>
-
-                <div class="form-group">
-                    <label>E-mail</label>
-                    <input type="email" name="email" value="{{ old('email', $cliente->email ?? '') }}">
-                </div>
-
-                <div class="form-group">
-                    <label>Status</label>
-                    <select name="status">
-                        @foreach(['ativo' => 'Ativo', 'inativo' => 'Inativo', 'pendente' => 'Pendente'] as $val => $lbl)
-                            <option value="{{ $val }}" {{ old('status', $cliente->status ?? 'ativo') == $val ? 'selected' : '' }}>{{ $lbl }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Observações</label>
-                    <textarea name="observacoes">{{ old('observacoes', $cliente->observacoes ?? '') }}</textarea>
+                <div class="form-sec-title">Propriedade</div>
+                <div class="form-grid-2">
+                    <div class="form-group" style="grid-column:1 / -1;">
+                        <label>Nome da propriedade *</label>
+                        <input type="text" name="nome_propriedade" value="{{ old('nome_propriedade', $cliente->nome_propriedade) }}" required>
+                        @error('nome_propriedade')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
+                        <label>Área total (ha) *</label>
+                        <input type="number" step="0.01" min="0.01" name="area_total_ha" value="{{ old('area_total_ha', $cliente->area_total_ha) }}" required>
+                        @error('area_total_ha')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
+                        <label>Cultura principal</label>
+                        <select name="cultura_principal">
+                            <option value="">Selecione…</option>
+                            @foreach(['Soja','Milho','Café','Cana','Algodão','Hortaliças','Citros','Trigo','Feijão','Pastagem'] as $c)
+                                <option value="{{ $c }}" {{ old('cultura_principal', $cliente->cultura_principal) == $c ? 'selected' : '' }}>{{ $c }}</option>
+                            @endforeach
+                        </select>
+                        @error('cultura_principal')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
                 </div>
 
                 <div class="form-actions">

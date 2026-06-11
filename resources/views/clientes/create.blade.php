@@ -1,11 +1,15 @@
-{{--
-    CLIENTES — ADICIONAR
-    Rota: clientes.create (GET)  ·  Envia para: clientes.store (POST)
-    Campos: nome, cpf, cultura, cidade, telefone, email, observacoes
---}}
 @extends('dashboard')
 @section('page-title', 'Adicionar cliente — Meu Agrônomo')
 @section('topbar-title', 'Adicionar cliente')
+
+@push('styles')
+<style>
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+    @media (max-width: 640px) { .form-grid-2 { grid-template-columns: 1fr; } }
+    .form-sec-title { font-size: 13px; font-weight: 700; letter-spacing: .01em; color: var(--text); margin: 26px 0 16px; padding-top: 22px; border-top: 1px solid var(--border-soft); }
+    .form-sec-title:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+</style>
+@endpush
 
 @section('main-content')
 <div class="ma-page">
@@ -22,52 +26,95 @@
         </div>
     </div>
 
-    <div class="form-page">
+    @if($errors->any())
+        <div class="alert alert-danger">Revise os campos destacados abaixo.</div>
+    @endif
+
+    <div class="form-page" style="max-width:760px;">
         <div class="form-card">
             <form action="{{ route('clientes.store') }}" method="POST">
                 @csrf
 
-                <div class="form-group">
-                    <label>Nome completo</label>
-                    <input type="text" name="nome" value="{{ old('nome') }}" placeholder="Ex.: João Bemvindo" required>
-                    @error('nome')<span class="text-danger">{{ $message }}</span>@enderror
+                <div class="form-sec-title">Dados do cliente</div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>Nome completo *</label>
+                        <input type="text" name="nome" value="{{ old('nome') }}" placeholder="Ex.: João Bemvindo" required>
+                        @error('nome')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
+                        <label>CPF *</label>
+                        <input type="text" id="cpf" name="cpf" value="{{ old('cpf') }}" placeholder="000.000.000-00" required>
+                        @error('cpf')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
+                        <label>RG</label>
+                        <input type="text" name="rg" value="{{ old('rg') }}" placeholder="Opcional">
+                        @error('rg')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
+                        <label>Contato (WhatsApp) *</label>
+                        <input type="text" id="contato" name="contato" value="{{ old('contato') }}" placeholder="(00) 00000-0000" required>
+                        @error('contato')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone fixo</label>
+                        <input type="text" id="telefone" name="telefone" value="{{ old('telefone') }}" placeholder="(00) 0000-0000">
+                        @error('telefone')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>CPF / Documento</label>
-                    <input type="text" name="cpf" value="{{ old('cpf') }}" placeholder="000.000.000-00">
-                    @error('cpf')<span class="text-danger">{{ $message }}</span>@enderror
+                <div class="form-sec-title">Endereço</div>
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label>CEP *</label>
+                        <input type="text" id="cep" name="cep" value="{{ old('cep') }}" placeholder="00000-000" required>
+                        @error('cep')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
+                        <label>Cidade *</label>
+                        <input type="text" name="cidade" value="{{ old('cidade') }}" placeholder="Cidade" required>
+                        @error('cidade')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group" style="grid-column:1 / -1;">
+                        <label>Endereço *</label>
+                        <input type="text" name="endereco" value="{{ old('endereco') }}" placeholder="Rua, número, bairro" required>
+                        @error('endereco')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
+                        <label>Estado (UF) *</label>
+                        <select name="estado" required>
+                            <option value="">Selecione…</option>
+                            @foreach(['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'] as $uf)
+                                <option value="{{ $uf }}" {{ old('estado') == $uf ? 'selected' : '' }}>{{ $uf }}</option>
+                            @endforeach
+                        </select>
+                        @error('estado')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Cultura principal</label>
-                    <select name="cultura">
-                        <option value="">Selecione…</option>
-                        @foreach(['Soja','Milho','Café','Cana','Algodão','Hortaliças','Citros','Trigo','Feijão','Pastagem'] as $c)
-                            <option value="{{ $c }}" {{ old('cultura') == $c ? 'selected' : '' }}>{{ $c }}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Cidade / UF</label>
-                    <input type="text" name="cidade" value="{{ old('cidade') }}" placeholder="Cidade/UF">
-                </div>
-
-                <div class="form-group">
-                    <label>Telefone / WhatsApp</label>
-                    <input type="text" name="telefone" value="{{ old('telefone') }}" placeholder="(00) 00000-0000">
-                </div>
-
-                <div class="form-group">
-                    <label>E-mail</label>
-                    <input type="email" name="email" value="{{ old('email') }}" placeholder="cliente@email.com">
-                    @error('email')<span class="text-danger">{{ $message }}</span>@enderror
-                </div>
-
-                <div class="form-group">
-                    <label>Observações</label>
-                    <textarea name="observacoes" placeholder="Notas internas sobre o cliente…">{{ old('observacoes') }}</textarea>
+                <div class="form-sec-title">Propriedade</div>
+                <div class="form-grid-2">
+                    <div class="form-group" style="grid-column:1 / -1;">
+                        <label>Nome da propriedade *</label>
+                        <input type="text" name="nome_propriedade" value="{{ old('nome_propriedade') }}" placeholder="Ex.: Fazenda Santa Helena" required>
+                        @error('nome_propriedade')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
+                        <label>Área total (ha) *</label>
+                        <input type="number" step="0.01" min="0.01" name="area_total_ha" value="{{ old('area_total_ha') }}" placeholder="0,00" required>
+                        @error('area_total_ha')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
+                        <label>Cultura principal</label>
+                        <select name="cultura_principal">
+                            <option value="">Selecione…</option>
+                            @foreach(['Soja','Milho','Café','Cana','Algodão','Hortaliças','Citros','Trigo','Feijão','Pastagem'] as $c)
+                                <option value="{{ $c }}" {{ old('cultura_principal') == $c ? 'selected' : '' }}>{{ $c }}</option>
+                            @endforeach
+                        </select>
+                        @error('cultura_principal')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
                 </div>
 
                 <div class="form-actions">
