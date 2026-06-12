@@ -6,7 +6,10 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Carbon;
+use Symfony\Component\Mailer\Bridge\Brevo\Transport\BrevoTransportFactory;
+use Symfony\Component\Mailer\Transport\Dsn;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +26,21 @@ class AppServiceProvider extends ServiceProvider
 
         // Paginação no padrão estilizado pelo style.css (Bootstrap CSS foi removido)
         Paginator::useBootstrapFive();
+
+        /*
+        |--------------------------------------------------------------------
+        | E-MAIL VIA API HTTP DO BREVO (porta 443 / HTTPS)
+        |--------------------------------------------------------------------
+        | O Railway BLOQUEIA conexões SMTP de saída (portas 587/2525 dão
+        | "Connection timed out"). Por isso registramos um "mailer" chamado
+        | "brevo" que envia pela API HTTP do Brevo — que usa HTTPS (443),
+        | porta liberada. Ative com MAIL_MAILER=brevo e BREVO_API_KEY no .env.
+        */
+        Mail::extend('brevo', function (array $config = []) {
+            return (new BrevoTransportFactory)->create(
+                new Dsn('brevo+api', 'default', config('services.brevo.key'))
+            );
+        });
 
         /*
         |--------------------------------------------------------------------
