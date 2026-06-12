@@ -19,39 +19,47 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    /**
+     * A tela de cadastro pede apenas nome, e-mail e senha.
+     * Por isso 'celular' e 'data_nascimento' são OPCIONAIS aqui —
+     * o agrônomo completa esses dados depois em "Meu perfil".
+     * (Antes eram obrigatórios e a validação falhava sempre, sem
+     *  campos no formulário para corrigir — por isso o cadastro não funcionava.)
+     */
     protected function validator(array $data)
     {
-        // Remove tudo que não for número do celular antes da validação
         if (isset($data['celular'])) {
             $data['celular'] = preg_replace('/\D/', '', $data['celular']);
         }
 
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'data_nascimento' => ['required', 'date'],
-            'celular' => ['required', 'digits_between:10,15'],
+            'name'            => ['required', 'string', 'max:255'],
+            'email'           => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password'        => ['required', 'string', 'min:8', 'confirmed'],
+            'data_nascimento' => ['nullable', 'date'],
+            'celular'         => ['nullable', 'digits_between:10,15'],
         ], [
             'celular.digits_between' => 'O celular deve conter apenas números e ter entre 10 e 15 dígitos.',
-            'email.unique' => 'Usuário já cadastrado!',
+            'email.unique'           => 'Este e-mail já está cadastrado.',
+            'password.confirmed'     => 'A confirmação de senha não confere.',
+            'password.min'           => 'A senha deve ter no mínimo 8 caracteres.',
         ]);
     }
 
     protected function create(array $data)
     {
-        // Remove caracteres não numéricos do celular
-        $numero = preg_replace('/\D/', '', $data['celular']);
-
-        // Formata o celular para exibição
-        $celular = $this->formatarCelular($numero);
+        $celular = null;
+        if (!empty($data['celular'])) {
+            $numero = preg_replace('/\D/', '', $data['celular']);
+            $celular = $this->formatarCelular($numero);
+        }
 
         return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'data_nascimento' => $data['data_nascimento'],
-            'celular' => $celular,
+            'name'            => $data['name'],
+            'email'           => $data['email'],
+            'password'        => Hash::make($data['password']),
+            'data_nascimento' => $data['data_nascimento'] ?? null,
+            'celular'         => $celular,
         ]);
     }
 

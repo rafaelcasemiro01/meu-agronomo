@@ -7,6 +7,47 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Notificações (sino da topbar) */
+        .ma-notify { position: relative; }
+        .ma-bell { position: relative; }
+        .ma-bell__count { position: absolute; top: 3px; right: 3px; min-width: 16px; height: 16px; padding: 0 4px;
+            display: grid; place-items: center; border-radius: 999px; background: var(--primary); color: var(--primary-ink, #fff);
+            font-size: 10px; font-weight: 800; line-height: 1; box-shadow: 0 0 0 2px var(--surface); }
+        [data-theme="dark"] .ma-bell__count { background: var(--sage-bright); color: #0f1311; }
+        .ma-notify__panel { position: absolute; top: calc(100% + 10px); right: 0; width: 340px; max-width: 86vw; z-index: 80;
+            background: var(--surface); border: 1px solid var(--border-soft); border-radius: 16px;
+            box-shadow: 0 12px 40px -10px rgba(20,30,25,.28); overflow: hidden; animation: maNotifyIn .16s ease; }
+        [data-theme="dark"] .ma-notify__panel { box-shadow: 0 14px 44px -12px rgba(0,0,0,.5); }
+        @keyframes maNotifyIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+        .ma-notify__head { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px;
+            border-bottom: 1px solid var(--border-soft); font-size: 14px; font-weight: 700; letter-spacing: -.01em; }
+        .ma-notify__badge { min-width: 20px; height: 20px; padding: 0 6px; display: grid; place-items: center;
+            border-radius: 999px; background: var(--accent-soft); color: var(--primary); font-size: 11.5px; font-weight: 700; }
+        [data-theme="dark"] .ma-notify__badge { color: var(--sage-bright); }
+        .ma-notify__list { max-height: 320px; overflow-y: auto; }
+        .ma-notify__item { display: flex; align-items: center; gap: 12px; padding: 13px 16px; text-decoration: none;
+            color: inherit; border-bottom: 1px solid var(--border-soft); transition: background .14s; position: relative; }
+        .ma-notify__item:last-child { border-bottom: 0; }
+        .ma-notify__item:hover { background: var(--surface-2); }
+        .ma-notify__ic { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 11px; flex-shrink: 0;
+            background: var(--accent-soft); color: var(--primary); }
+        [data-theme="dark"] .ma-notify__ic { color: var(--sage-bright); }
+        .ma-notify__item.is-urgent .ma-notify__ic { background: color-mix(in srgb, var(--warn, #b07c2e) 16%, transparent); color: var(--warn, #b07c2e); }
+        .ma-notify__ic svg { width: 18px; height: 18px; }
+        .ma-notify__body { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+        .ma-notify__title { font-size: 13.5px; font-weight: 600; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .ma-notify__when { font-size: 12.5px; color: var(--text-mute); margin-top: 2px; }
+        .ma-notify__item.is-urgent .ma-notify__when { color: var(--warn, #b07c2e); font-weight: 600; }
+        .ma-notify__pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--warn, #b07c2e); flex-shrink: 0; }
+        .ma-notify__empty { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 34px 20px; text-align: center;
+            color: var(--text-mute); font-size: 13px; }
+        .ma-notify__empty svg { width: 26px; height: 26px; opacity: .5; }
+        .ma-notify__foot { display: block; padding: 12px 16px; text-align: center; font-size: 13px; font-weight: 600;
+            color: var(--primary); text-decoration: none; border-top: 1px solid var(--border-soft); }
+        [data-theme="dark"] .ma-notify__foot { color: var(--sage-bright); }
+        .ma-notify__foot:hover { background: var(--surface-2); }
+    </style>
     @stack('styles')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script>
@@ -165,10 +206,44 @@
                             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
                         </svg>
                     </button>
-                    <button class="ma-theme-btn ma-bell" type="button" aria-label="Notificações">
-                        <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                        <span class="ma-bell__dot"></span>
-                    </button>
+                    <div class="ma-notify">
+                        <button class="ma-theme-btn ma-bell" type="button" id="maBellBtn" aria-label="Notificações" aria-expanded="false">
+                            <svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                            @if(isset($notificacoes) && $notificacoes->count() > 0)
+                                <span class="ma-bell__count">{{ $notificacoes->count() > 9 ? '9+' : $notificacoes->count() }}</span>
+                            @endif
+                        </button>
+                        <div class="ma-notify__panel" id="maNotifyPanel" hidden>
+                            <div class="ma-notify__head">
+                                <span>Notificações</span>
+                                @if(isset($notificacoes) && $notificacoes->count() > 0)
+                                    <span class="ma-notify__badge">{{ $notificacoes->count() }}</span>
+                                @endif
+                            </div>
+                            <div class="ma-notify__list">
+                                @forelse(($notificacoes ?? []) as $n)
+                                    <a href="{{ route('visitas.minhas') }}" class="ma-notify__item {{ $n->urgente ? 'is-urgent' : '' }}">
+                                        <span class="ma-notify__ic">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                                        </span>
+                                        <span class="ma-notify__body">
+                                            <span class="ma-notify__title">Visita — {{ $n->cliente }}</span>
+                                            <span class="ma-notify__when">{{ $n->texto }}</span>
+                                        </span>
+                                        @if($n->urgente)<span class="ma-notify__pulse"></span>@endif
+                                    </a>
+                                @empty
+                                    <div class="ma-notify__empty">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                                        <span>Tudo em dia — nenhuma visita próxima.</span>
+                                    </div>
+                                @endforelse
+                            </div>
+                            @if(isset($notificacoes) && $notificacoes->count() > 0)
+                                <a href="{{ route('visitas.minhas') }}" class="ma-notify__foot">Ver todas as visitas</a>
+                            @endif
+                        </div>
+                    </div>
                     <div class="ma-user-avatar" title="{{ Auth::user()->name }}">
                         {{ strtoupper(substr(Auth::user()->name, 0, 2)) }}
                     </div>
@@ -214,6 +289,32 @@
         themeBtn.addEventListener('click', function() {
             applyTheme(htmlEl.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
         });
+
+        // --- Notificações (abrir/fechar o painel do sino) ---
+        const bellBtn = document.getElementById('maBellBtn');
+        const notifyPanel = document.getElementById('maNotifyPanel');
+        if (bellBtn && notifyPanel) {
+            bellBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const open = !notifyPanel.hasAttribute('hidden');
+                if (open) {
+                    notifyPanel.setAttribute('hidden', '');
+                    bellBtn.setAttribute('aria-expanded', 'false');
+                } else {
+                    notifyPanel.removeAttribute('hidden');
+                    bellBtn.setAttribute('aria-expanded', 'true');
+                }
+            });
+            document.addEventListener('click', function(e) {
+                if (!notifyPanel.hasAttribute('hidden') && !notifyPanel.contains(e.target) && !bellBtn.contains(e.target)) {
+                    notifyPanel.setAttribute('hidden', '');
+                    bellBtn.setAttribute('aria-expanded', 'false');
+                }
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') { notifyPanel.setAttribute('hidden', ''); bellBtn.setAttribute('aria-expanded', 'false'); }
+            });
+        }
     </script>
     @stack('scripts')
 </body>

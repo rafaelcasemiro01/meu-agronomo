@@ -74,17 +74,17 @@
                     </div>
                     <div class="form-group">
                         <label>Cidade *</label>
-                        <input type="text" name="cidade" value="{{ old('cidade', $cliente->cidade) }}" required>
+                        <input type="text" id="cidade" name="cidade" value="{{ old('cidade', $cliente->cidade) }}" required>
                         @error('cidade')<span class="text-danger">{{ $message }}</span>@enderror
                     </div>
                     <div class="form-group" style="grid-column:1 / -1;">
                         <label>Endereço *</label>
-                        <input type="text" name="endereco" value="{{ old('endereco', $cliente->endereco) }}" required>
+                        <input type="text" id="endereco" name="endereco" value="{{ old('endereco', $cliente->endereco) }}" required>
                         @error('endereco')<span class="text-danger">{{ $message }}</span>@enderror
                     </div>
                     <div class="form-group">
                         <label>Estado (UF) *</label>
-                        <select name="estado" required>
+                        <select id="estado" name="estado" required>
                             <option value="">Selecione…</option>
                             @foreach(['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'] as $uf)
                                 <option value="{{ $uf }}" {{ old('estado', $cliente->estado) == $uf ? 'selected' : '' }}>{{ $uf }}</option>

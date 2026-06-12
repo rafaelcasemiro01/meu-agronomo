@@ -69,21 +69,26 @@
                     <div class="form-group">
                         <label>CEP *</label>
                         <input type="text" id="cep" name="cep" value="{{ old('cep') }}" placeholder="00000-000" required>
+                        <div class="cep-hint">Digite o CEP para preencher o endereço automaticamente.</div>
                         @error('cep')<span class="text-danger">{{ $message }}</span>@enderror
                     </div>
                     <div class="form-group">
-                        <label>Cidade *</label>
-                        <input type="text" name="cidade" value="{{ old('cidade') }}" placeholder="Cidade" required>
-                        @error('cidade')<span class="text-danger">{{ $message }}</span>@enderror
+                        <label>Número</label>
+                        <input type="text" id="numero" name="numero" value="{{ old('numero') }}" placeholder="Ex.: 123" inputmode="numeric">
                     </div>
                     <div class="form-group" style="grid-column:1 / -1;">
                         <label>Endereço *</label>
-                        <input type="text" name="endereco" value="{{ old('endereco') }}" placeholder="Rua, número, bairro" required>
+                        <input type="text" id="endereco" name="endereco" value="{{ old('endereco') }}" placeholder="Rua e bairro (preenchido pelo CEP)" required>
                         @error('endereco')<span class="text-danger">{{ $message }}</span>@enderror
                     </div>
                     <div class="form-group">
+                        <label>Cidade *</label>
+                        <input type="text" id="cidade" name="cidade" value="{{ old('cidade') }}" placeholder="Cidade" required>
+                        @error('cidade')<span class="text-danger">{{ $message }}</span>@enderror
+                    </div>
+                    <div class="form-group">
                         <label>Estado (UF) *</label>
-                        <select name="estado" required>
+                        <select id="estado" name="estado" required>
                             <option value="">Selecione…</option>
                             @foreach(['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'] as $uf)
                                 <option value="{{ $uf }}" {{ old('estado') == $uf ? 'selected' : '' }}>{{ $uf }}</option>
