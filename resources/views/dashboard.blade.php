@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('page-title', 'Meu Agrônomo')</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%233f6553'/%3E%3Cpath d='M32 50V37' stroke='white' stroke-width='4.3' stroke-linecap='round'/%3E%3Cg transform='translate(32,38)'%3E%3Cpath transform='rotate(27)' d='M0 0C-8.5-11-7-26 0-35 7-26 8.5-11 0 0Z' fill='white'/%3E%3Cpath transform='rotate(-29) scale(0.9)' d='M0 0C-8.5-11-7-26 0-35 7-26 8.5-11 0 0Z' fill='white'/%3E%3C/g%3E%3C/svg%3E">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">

@@ -6,6 +6,9 @@
 <style>
     .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
     @media (max-width: 640px) { .form-grid-2 { grid-template-columns: 1fr; } }
+    .alert-warning { background: color-mix(in srgb, var(--warn, #b07c2e) 13%, transparent); color: var(--warn, #b07c2e);
+        border: 1px solid color-mix(in srgb, var(--warn, #b07c2e) 30%, transparent); border-radius: 12px; padding: 14px 16px;
+        font-size: 14px; font-weight: 500; margin-bottom: 18px; }
 </style>
 @endpush
 
@@ -27,10 +30,20 @@
     @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
     @if($errors->any())<div class="alert alert-danger">Revise os campos destacados abaixo.</div>@endif
 
+    @if(session('confirmar_conflito'))
+        <div class="alert alert-warning" style="display:flex;gap:12px;align-items:flex-start;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px;"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <div>{{ session('conflito_msg') }}</div>
+        </div>
+    @endif
+
     <div class="form-page" style="max-width:680px;">
         <div class="form-card">
             <form action="{{ route('visitas.store') }}" method="POST">
                 @csrf
+                @if(session('confirmar_conflito'))
+                    <input type="hidden" name="confirmar_conflito" value="1">
+                @endif
 
                 <div class="form-group">
                     <label>Cliente *</label>
@@ -76,7 +89,9 @@
 
                 <div class="form-actions">
                     <a href="{{ route('visitas.minhas') }}" class="btn-cancelar">Cancelar</a>
-                    <button type="submit" class="btn-salvar">Confirmar agendamento</button>
+                    <button type="submit" class="btn-salvar">
+                        {{ session('confirmar_conflito') ? 'Agendar mesmo assim' : 'Confirmar agendamento' }}
+                    </button>
                 </div>
             </form>
         </div>

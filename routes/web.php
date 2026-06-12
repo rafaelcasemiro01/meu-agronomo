@@ -6,7 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VisitaTecnicaController;
-use App\Http\Controllers\RelatorioController; // NOVO
+use App\Http\Controllers\RelatorioController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,10 +15,10 @@ use App\Http\Controllers\RelatorioController; // NOVO
 */
 
 Auth::routes([
-    'login'      => true,
-    'register'   => true,
-    'reset'      => true,
-    'verify'     => false,
+    'login'    => true,
+    'register' => true,
+    'reset'    => true,
+    'verify'   => false,
 ]);
 
 Route::get('/login', function () {
@@ -44,12 +44,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // --- Clientes ---
     Route::resource('clientes', ClienteController::class);
     Route::patch('/clientes/{cliente}/activate', [ClienteController::class, 'activate'])->name('clientes.activate');
+    // Exclusão DEFINITIVA (diferente de inativar)
+    Route::delete('/clientes/{cliente}/excluir', [ClienteController::class, 'forceDestroy'])->name('clientes.force');
 
     // --- Perfil ---
     Route::prefix('perfil')->name('perfil.')->group(function () {
         Route::get('/info', [ProfileController::class, 'editInfo'])->name('info');
         Route::patch('/info', [ProfileController::class, 'updateInfo'])->name('update.info');
-
         Route::get('/senha', [ProfileController::class, 'editPassword'])->name('senha');
         Route::patch('/senha', [ProfileController::class, 'updatePassword'])->name('update.senha');
     });
@@ -61,10 +62,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/minhas', [VisitaTecnicaController::class, 'minhasVisitas'])->name('minhas');
         Route::patch('/{visita}/cancelar', [VisitaTecnicaController::class, 'cancelar'])->name('cancelar');
         Route::patch('/{visita}/realizar', [VisitaTecnicaController::class, 'realizar'])->name('realizar');
+        // Desfaz "realizada"/"cancelada" → volta para "agendada"
+        Route::patch('/{visita}/reabrir', [VisitaTecnicaController::class, 'reabrir'])->name('reabrir');
     });
 
-    // --- Relatórios (NOVO) ---
+    // --- Relatórios ---
     Route::resource('relatorios', RelatorioController::class);
     Route::patch('/relatorios/{relatorio}/finalizar', [RelatorioController::class, 'finalizar'])->name('relatorios.finalizar');
-    Route::get('/relatorios/{relatorio}/imprimir', [RelatorioController::class, 'imprimir'])->name('relatorios.imprimir');
 });

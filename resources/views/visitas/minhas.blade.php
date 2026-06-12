@@ -71,6 +71,14 @@
                             <button type="submit" class="action-btn danger">Cancelar</button>
                         </form>
                     </div>
+                @else
+                    <div class="visita-actions">
+                        <form action="{{ route('visitas.reabrir', $visita) }}" method="POST"
+                              onsubmit="return confirm('Reabrir esta visita? Ela volta para “agendada”.');">
+                            @csrf @method('PATCH')
+                            <button type="submit" class="action-btn edit">Reabrir</button>
+                        </form>
+                    </div>
                 @endif
             </div>
         @empty

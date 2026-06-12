@@ -14,9 +14,6 @@ class ClienteController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Lista os clientes do usuário logado, com busca e filtro de status.
-     */
     public function index(Request $request)
     {
         /** @var \App\Models\User $user */
@@ -27,10 +24,6 @@ class ClienteController extends Controller
         $temBusca   = $request->filled('search');
         $searchTerm = trim((string) $request->input('search'));
 
-        // Filtro de status: 'ativo' por padrão.
-        // IMPORTANTE: quando há uma busca, procuramos em TODOS os status
-        // (a menos que o usuário escolha um filtro explicitamente) — assim
-        // o cliente procurado sempre aparece, mesmo se estiver inativo.
         $status = $request->input('status', $temBusca ? 'todos' : 'ativo');
 
         if ($status === 'ativo') {
@@ -38,7 +31,6 @@ class ClienteController extends Controller
         } elseif ($status === 'inativo') {
             $query->where('status', false);
         }
-        // 'todos' → sem filtro de status
 
         if ($temBusca && $searchTerm !== '') {
             $query->where(function ($q) use ($searchTerm) {
@@ -124,6 +116,9 @@ class ClienteController extends Controller
         return redirect()->route('clientes.index')->with('success', 'Cliente e propriedade atualizados com sucesso!');
     }
 
+    /**
+     * Inativa o cliente (soft — mantém o histórico).
+     */
     public function destroy(Cliente $cliente)
     {
         $this->autorizar($cliente);
@@ -138,6 +133,29 @@ class ClienteController extends Controller
         $cliente->update(['status' => true]);
 
         return redirect()->route('clientes.index')->with('success', 'Cliente reativado com sucesso!');
+    }
+
+    /**
+     * EXCLUI o cliente DEFINITIVAMENTE, junto com suas visitas e relatórios.
+     * (Ação irreversível — diferente de "Inativar".)
+     */
+    public function forceDestroy(Cliente $cliente)
+    {
+        $this->autorizar($cliente);
+
+        // Remove dependências manualmente (caso o banco não tenha cascade)
+        if (method_exists($cliente, 'visitasTecnicas')) {
+            $cliente->visitasTecnicas()->delete();
+        }
+        // Remove relatórios ligados a este cliente, se a tabela existir
+        if (\Illuminate\Support\Facades\Schema::hasTable('relatorios')) {
+            \App\Models\Relatorio::where('cliente_id', $cliente->id)->delete();
+        }
+
+        $nome = $cliente->nome;
+        $cliente->delete();
+
+        return redirect()->route('clientes.index')->with('success', "Cliente \"{$nome}\" excluído definitivamente.");
     }
 
     private function autorizar(Cliente $cliente): void

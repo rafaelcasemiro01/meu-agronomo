@@ -82,6 +82,12 @@
                                     <button type="submit" class="action-btn edit">Reativar</button>
                                 </form>
                             @endif
+                            <form action="{{ route('clientes.force', $cliente) }}" method="POST"
+                                  onsubmit="return confirm('EXCLUIR DEFINITIVAMENTE este cliente?\n\nEsta ação remove o cliente e TODAS as suas visitas e relatórios. Não pode ser desfeita.');" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="action-btn danger">Excluir</button>
+                            </form>
                         </div>
                     </td>
                 </tr>
