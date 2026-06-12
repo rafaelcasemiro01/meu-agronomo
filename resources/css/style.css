@@ -763,3 +763,89 @@ body.auth-body {
 /* Scrollbar da navegação lateral discreta (como no protótipo) */
 .ma-nav { scrollbar-width: none; -ms-overflow-style: none; }
 .ma-nav::-webkit-scrollbar { width: 0; height: 0; }
+
+
+/* ============================================================
+   RESPONSIVIDADE MOBILE — ajuste fino (v8)
+   Telefones: tabelas roláveis, cabeçalhos empilhados,
+   ações em largura total, paddings menores.
+   ============================================================ */
+
+/* Tabelas: rolam na horizontal em vez de cortar/espremer */
+.tabela-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+@media (max-width: 760px) {
+  /* Cabeçalho de página: título em cima, botão embaixo (largura total) */
+  .page-header { flex-direction: column; align-items: stretch; gap: 14px; }
+  .page-header .btn-add,
+  .page-header .btn-adicionar { width: 100%; justify-content: center; padding: 12px 16px; }
+
+  /* Saudação do painel */
+  .ma-greet__actions { width: 100%; }
+  .ma-greet__actions .btn { flex: 1; justify-content: center; }
+
+  /* Formulários: cancelar/salvar em coluna, largura total e dedo-friendly */
+  .form-actions { flex-direction: column-reverse; }
+  .form-actions .btn-salvar,
+  .form-actions .btn-cancelar,
+  .form-actions .btn-agendar { width: 100%; padding: 13px 24px; }
+  .form-card { padding: 22px 18px; }
+
+  /* Topbar: avatar dá lugar ao essencial */
+  .ma-topbar { padding-left: 16px; padding-right: 16px; gap: 6px; }
+  .ma-topbar__right { gap: 6px; }
+
+  /* Painel de notificações ocupa quase a tela e ancora pela direita */
+  .ma-notify__panel { position: fixed; top: 64px; right: 12px; left: 12px; width: auto; max-width: none; }
+
+  /* Cartões de métrica: 2 por linha, números menores */
+  .ma-stats { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .ma-stat { padding: 16px 16px; }
+  .ma-stat__num { font-size: 30px; }
+  .ma-stat__sub { font-size: 12px; }
+
+  /* Detalhe do cliente / grids de 2 colunas viram 1 */
+  .detail-grid { grid-template-columns: 1fr !important; }
+
+  /* Tabela com toque confortável + dica visual de rolagem */
+  .tabela-clientes { min-width: 560px; }
+  .tabela-clientes thead th,
+  .tabela-clientes tbody td { padding: 12px 14px; }
+  .acoes { gap: 2px; flex-wrap: nowrap; }
+  .action-btn { padding: 6px 9px; }
+}
+
+@media (max-width: 480px) {
+  /* Cartões de métrica: 1 por linha em telas bem estreitas */
+  .ma-stats { grid-template-columns: 1fr; }
+
+  /* Saudação e títulos proporcionais */
+  .ma-greet h1 { font-size: 26px; }
+  .ma-greet__actions { flex-direction: column; }
+  .ma-greet__actions .btn { width: 100%; }
+  .page-header h2 { font-size: 20px; }
+
+  /* Conteúdo com respiro lateral menor */
+  .ma-page { padding: 20px 16px 56px; }
+
+  /* Esconde o avatar do topo para sobrar espaço (já há no menu lateral) */
+  .ma-topbar .ma-user-avatar { display: none; }
+
+  /* Visitas: ações abaixo do conteúdo, largura total */
+  .visita-actions { width: 100%; }
+  .visita-actions form { flex: 1; }
+  .visita-actions .action-btn { width: 100%; justify-content: center; padding: 9px; }
+
+  /* Linha de visita do painel: chevron sem encolher o texto */
+  .ma-visitrow { gap: 11px; }
+
+  /* Cartão de formulário e abas roláveis */
+  .filter-bar { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 4px; }
+  .filter-btn { white-space: nowrap; flex-shrink: 0; }
+}
+
+/* Evita zoom automático do iOS ao focar inputs (fonte >= 16px) */
+@media (max-width: 760px) {
+  .form-group input, .form-group select, .form-group textarea,
+  .input, .ma-topbar__search input { font-size: 16px; }
+}
