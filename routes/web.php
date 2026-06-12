@@ -44,7 +44,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // --- Clientes ---
     Route::resource('clientes', ClienteController::class);
     Route::patch('/clientes/{cliente}/activate', [ClienteController::class, 'activate'])->name('clientes.activate');
-    // Exclusão DEFINITIVA (diferente de inativar)
     Route::delete('/clientes/{cliente}/excluir', [ClienteController::class, 'forceDestroy'])->name('clientes.force');
 
     // --- Perfil ---
@@ -62,11 +61,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/minhas', [VisitaTecnicaController::class, 'minhasVisitas'])->name('minhas');
         Route::patch('/{visita}/cancelar', [VisitaTecnicaController::class, 'cancelar'])->name('cancelar');
         Route::patch('/{visita}/realizar', [VisitaTecnicaController::class, 'realizar'])->name('realizar');
-        // Desfaz "realizada"/"cancelada" → volta para "agendada"
         Route::patch('/{visita}/reabrir', [VisitaTecnicaController::class, 'reabrir'])->name('reabrir');
     });
 
     // --- Relatórios ---
     Route::resource('relatorios', RelatorioController::class);
     Route::patch('/relatorios/{relatorio}/finalizar', [RelatorioController::class, 'finalizar'])->name('relatorios.finalizar');
+    // ESSENCIAL: rota do PDF/impressão — sem ela a tela do relatório quebra (e o salvar da edição também)
+    Route::get('/relatorios/{relatorio}/imprimir', [RelatorioController::class, 'imprimir'])->name('relatorios.imprimir');
 });
